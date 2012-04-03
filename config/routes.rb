@@ -3,6 +3,10 @@ FeastMind::Application.routes.draw do
 
   match 'manager' => 'manager#index' 
 
+  match 'try_upload' => 'pages#try_upload'
+
+  match 'upload' => 'pages#upload'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

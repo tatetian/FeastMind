@@ -13,18 +13,17 @@ META_TITLE_MAX_LEN = 100
 class PdfMeta:
     def __init__(self, pdf_json):
         self._pdf_json = json.loads(pdf_json)
+        self._meta = {}
     def process(self):
-        meta = {}
         shared = {}
-        self._extract_title(meta, shared)
-        self._extract_authors(meta, shared)
-        self._extract_date(meta, shared)
-        self._pdf_json['meta'] = meta
-        return self._pdf_json
+        self._extract_title(self._meta, shared)
+        self._extract_authors(self._meta, shared)
+        self._extract_date(self._meta, shared)
+        return self._meta
     def json(self):
-        return self._pdf_json
+        return self._meta
     def __str__(self):
-        return json.dumps(self._pdf_json)#, indent=2)
+        return json.dumps(self._meta)#, indent=2)
     def _extract_title(self, meta, shared):
         # assume the title is on the first page
         first_page = self._pdf_json['pages'][0]
@@ -204,8 +203,8 @@ class TestPdfMeta(unittest.TestCase):
         meta = PdfMeta(pdf_json)
         meta.process()
         print 'Metadata of pdf "' + pdf_file + '" is:'
-        print meta.json()['meta']
-        self.assertEquals(meta.json()['meta'], expected_result);
+        print meta.json()
+        self.assertEquals(meta.json(), expected_result);
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,4 +4,4 @@
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
 SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"/
-${SCRIPT_DIR}pdfmeta/pdftojson $1
+cat $1 | python ${SCRIPT_DIR}pdfmeta/addmeta.py
