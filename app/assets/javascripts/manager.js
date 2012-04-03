@@ -143,7 +143,7 @@ FmTopPanel.prototype.init = function() {
                 {
                   start:0,
                   limit:10,
-                  keywords:that.cached.btns.$search.val()##
+                  keywords:that.cached.btns.$search.val()
                  },
                  function(response,status,xhr){
                     // show loading
