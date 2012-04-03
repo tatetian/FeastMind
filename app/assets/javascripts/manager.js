@@ -1,3 +1,8 @@
+//= require_tree ./scroller
+//= require plupload/plupload
+//= require plupload/plupload.html5
+//= require date-constants
+
 /********************************FmClient********************************/
 function FmManager() {
     this.topPanel = new FmTopPanel(this);
