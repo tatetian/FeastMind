@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="wrapper">
+        <div class="nav">
+            <a href="help.html">
+                <span class="nav-button" id="help-btn">HELP</span>
+            </a>
+            <a href="login.html">
+                <span class="nav-button" id="login-btn">LOG IN</span>
+            </a> 
+        </div>
+        <div id="logo" class="shadow-box">
+            <h1>FeastMind</h1>
+        </div>
+        <div class="nip-large"></div>
+        <h2 id="headline">
+            Read, manage and share<br/>
+            all your papers <br/>anywhere, anytime
+        </h2>
+        <a href="signup.html">
+            <h3 id="signup" class="shadow-box">
+                <span class="blue">Sign up for free</span>
+            </h3>
+        </a>
+        <div class="nip-large"></div>
+    </div>
+</div>
