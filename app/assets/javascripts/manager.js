@@ -133,6 +133,28 @@ FmTopPanel.prototype.init = function() {
     $(window).resize(function() {
         that.updateHeight();
     });
+     $(document).keydown(function(){ 
+        if(event.keyCode == 13) {
+          if(that.cached.btns.$search.width()==160){
+              that.manager.mainPanel.clearResult();
+              that.manager.showLoading(); 
+              $.get(
+                "search",
+                {
+                  start:0,
+                  limit:10,
+                  keywords:that.cached.btns.$search.val()
+                 },
+                 function(response,status,xhr){
+                    // show loading
+                    that.mainPanel.showResult(response.result);
+                    that.hideLoading();
+                 },
+                 "json"
+               );
+            }
+        }
+    });  
     this.updateHeight();
     // click entry event
     var additionalClass = {
