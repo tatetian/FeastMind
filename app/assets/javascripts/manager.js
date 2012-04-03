@@ -676,7 +676,7 @@ function FmWebService() {
     this.url = {
         root: "ws/",
         docsSearch: "docs/search",
-        docsUpload: "docs/upload",
+        docsUpload: "upload",
         docsDelete: "docs/"
     };
 }
@@ -843,7 +843,7 @@ function FmUploader(manager) {
         browse_button : this.elements.uploadBtn,
         drop_element: 'main',
         max_file_size : '10mb',
-        url : 'ws/upload',
+        url : 'upload.json',
         flash_swf_url : 'plupload/plupload.flash.swf',
         filters : [
             {title : "PDF files", extensions : "pdf"}
@@ -865,14 +865,14 @@ FmUploader.prototype.init = function() {
             var filename  = file.name;
             that.state.uploading = file.id;
             that.startMessage(filename);
-            //that.uploader.start();
-            setTimeout(function() {
+            that.uploader.start();
+            /*setTimeout(function() {
                 that.uploader.trigger('UploadProgress', {id: file.id, percent: 50});
             }, 500);
             setTimeout(function() {
                 that.uploader.trigger('UploadProgress', {id: file.id, percent: 100});
                 that.uploader.trigger('UploadComplete', file);
-            }, 1000);
+            }, 1000);*/
         }
     });
 
