@@ -207,11 +207,17 @@ FmTopPanel.prototype.init = function() {
         }
     });
     that.cached.btns.$addTag.click(function(){
-        $(".entries").append('<li class="entry clickable"><h3 class="tag"><input type="text" class="addtag" autocomplete="off" value="new tag"/></h3><h3 class="num">0</h3></li>');   
+        $(".tags .entries").append('<li class="entry clickable" id="newtag"><h3 class="tag"><input type="text" class="addtag" autocomplete="off"/></h3><h3 class="num">0</h3></li>');   
+        $(".addtag").focus();
         $(".addtag").blur(function(){
-            if($(".addtag").val()=="")
-                alert("OK");
-            else alert($(".addtag").val());
+            if($(".addtag").val()!=""){
+                  //alert($(".addtag").val());
+                  $("#newtag").removeAttr("id")
+                  $(".addtag").replaceWith($(".addtag").val());
+            }
+            else{
+                $("#newtag").remove();
+            }
         })
     });
 }
