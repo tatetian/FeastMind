@@ -19,6 +19,8 @@ function FmManager() {
     this.elements = {
         $loader: $("body > .loading")
     };
+    this.start = 0;
+    this.limit = 10;
 }
 FmManager.prototype.init = function() {
     // init components
@@ -54,10 +56,12 @@ FmManager.prototype.search = function(tag, keywords) {
     this.showLoading();
     // do search
     var that = this;
-    this.webService.docsSearch(tag, keywords, function(response) {
+    this.start = 0;
+    this.webService.docsSearch(tag, keywords, this.start, this.limit , function(response) {
         if(!response.error) {
             that.mainPanel.showResult(response.result);
             that.hideLoading();
+            that.start = that.start + that.limit;
         }
         else {  // handle error
             
@@ -72,10 +76,11 @@ FmManager.prototype.more = function() {
     // do the search
     var that = this;
     this.mainPanel.showLoadingMore();
-    this.webService.docsSearch(tag, keywords, function(response) {
+    this.webService.docsSearch(tag, keywords,this.start, this.limit, function(response) {
         if(!response.error) {
             that.mainPanel.showMoreResult(response.result);
             that.mainPanel.hideLoadingMore();
+            that.start = that.start + that.limit;
         }
         else {  // handle error
             
@@ -136,22 +141,24 @@ FmTopPanel.prototype.init = function() {
      $(document).keydown(function(){ 
         if(event.keyCode == 13) {
           if(that.cached.btns.$search.width()==160){
+              var tag = that.manager.lastSearch.tag;
+              that.manager.lastSearch.keywords = that.cached.btns.$search.val();
+              
               that.manager.mainPanel.clearResult();
               that.manager.showLoading(); 
-              $.get(
-                "search",
-                {
-                  start:0,
-                  limit:10,
-                  keywords:that.cached.btns.$search.val()
-                 },
-                 function(response,status,xhr){
-                    // show loading
-                    that.mainPanel.showResult(response.result);
-                    that.hideLoading();
-                 },
-                 "json"
-               );
+              that.manager.mainPanel.showResult(response.result);
+              that.manager.hideLoading();
+              that.manager.start = 0;
+              that.manager.webService.docsSearch(tag, that.manager.lastSearch.keywords,that.manager.start,that.manager.limit, function(response) {
+                  if(!response.error) {
+                        that.manager.mainPanel.showResult(response.result);
+                        that.manager.hideLoading();
+                        that.manager.start = that.manager.start+that.manager.limit;
+                  }
+                  else {  // handle error
+                      
+                  }
+              });
             }
         }
     });  
@@ -198,6 +205,14 @@ FmTopPanel.prototype.init = function() {
             that.cached.btns.$addTag.show();
             that.cached.btns.$editTag.show();
         }
+    });
+    that.cached.btns.$addTag.click(function(){
+        $(".entries").append('<li class="entry clickable"><h3 class="tag"><input type="text" class="addtag" autocomplete="off" value="new tag"/></h3><h3 class="num">0</h3></li>');   
+        $(".addtag").blur(function(){
+            if($(".addtag").val()=="")
+                alert("OK");
+            else alert($(".addtag").val());
+        })
     });
 }
 FmTopPanel.prototype.toggle = function() {
@@ -665,8 +680,20 @@ function FmWebService() {
         docsDelete: "docs/"
     };
 }
-FmWebService.prototype.docsSearch = function(tag, keywords, callback) {
-    var response = {
+FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callback) {
+    /*$.get(
+          "search",
+          {
+            start:start,
+            limit:limit,
+            keywords:keywords||""
+           },
+           function(response,status,xhr){
+              callback(response);
+           },
+           "json"
+     );*/
+     var response = {
         id: 1,
         error: null,
         result: {
@@ -709,7 +736,7 @@ FmWebService.prototype.docsEdit = function() {
 }
 FmWebService.prototype.tagsList = function() {
 }
-FmWebService.prototype.tagAdd = function() {
+FmWebService.prototype.tagAdd = function(newtag) {
 }
 FmWebService.prototype.tagEdit = function() {
 }
