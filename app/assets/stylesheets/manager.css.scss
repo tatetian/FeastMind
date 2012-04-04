@@ -522,7 +522,9 @@ body > .loading {
     -moz-transition: all 0.4s ease 0s;
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
+    
 }
+
 .search:focus {
     outline: 0;
 }
@@ -874,6 +876,67 @@ div.paper-cover > img {
 .upload-icon {
     background: url(/assets/upload.png) no-repeat center center;
 }
+
+.heart-icon{ 
+background: url(/assets/29-heart.png) no-repeat 0.15em center;
+font-family: Helvetica,Arial;
+    font-style: italic;
+    text-indent: 1.45em;
+	
+}
+.group-icon{ 
+
+background: url(/assets/112-group@2x.png) no-repeat 0.15em center;
+font-family: Helvetica,Arial;
+    font-style: italic;
+    text-indent: 1.45em;
+
+	
+}
+
+.friends-info{
+	left:0px;
+	top:0px;
+	position:relative;
+	float:left;
+	height:32px;
+	width:32px;
+}
+.result .entry .info .who {
+	font-size:20px;
+	font-weight:bold;
+	color:#09C;
+	
+}
+.result .entry .info .when {
+	font-size:12px;
+	
+	color: #333;
+	
+}
+.result .entry .info .action{
+	font-size:16px;
+	font-weight:bold;
+	color: #09C;
+	
+}
+.result .entry .info .mf {
+	margin-top:4px;
+	margin-left:50px;
+}
+.result .entry .info .info-detail {
+	margin-top:0px;
+	margin-left:50px;
+	
+}
+.result .entry .info .info-tags{
+	margin-top:5px;
+	
+	display:block;
+	padding:0px;
+	margin-left:50px;
+}
+	
 .entry .percent {
   float: right;
 }
