@@ -117,6 +117,19 @@ function FmTopPanel(manager) {
             $addTag: $('#top .topbar .slide.primary .button.plus-icon')
         }
     };
+    //tags data
+    this.tags = [
+                {   
+                    name: "column store",
+                    num: 1
+                },
+                {  
+                    name: "VLDB",
+                    num: 0
+                }
+            ];
+    //show tag
+    this.tagHtmlBuilder =  new FmTagHtmlBuilder();
     // scroller
     var scrollContainer = $(this.elements.content).get(0);
     var scrollContent = $(this.elements.tabs).get(0);
@@ -161,6 +174,7 @@ FmTopPanel.prototype.init = function() {
             }
         }
     });  
+    this.showTags(this.tags);
     this.updateHeight();
     // click entry event
     var additionalClass = {
@@ -219,6 +233,22 @@ FmTopPanel.prototype.init = function() {
             }
         })
     });
+    $(".tags .search").change(function(){
+        //$(".tags .search").val();
+        for(var i = 0; i< that.tags.length ; i++){
+            if(that.tags[i].name.indexOf($(".tags .search").val())<0){
+                alert("Oh!");
+            }
+        }
+    })
+}
+FmTopPanel.prototype.showTags = function(tags) {
+    var $result = $(".tags .entries");
+     $(".tags .entry.clickable").remove();
+    // update counter
+    // build new result HTML elements
+    var resultHtml = this.tagHtmlBuilder.toHtml(tags);
+    $result.append(resultHtml);
 }
 FmTopPanel.prototype.toggle = function() {
     this.state.expanded = !this.state.expanded;
@@ -770,13 +800,28 @@ FmWebService.prototype.docsDetail = function() {
 }
 FmWebService.prototype.docsEdit = function() {
 }
-FmWebService.prototype.tagsList = function() {
+FmWebService.prototype.tagsList = function(callback) {
+      
 }
 FmWebService.prototype.tagAdd = function(newtag) {
 }
 FmWebService.prototype.tagEdit = function() {
 }
 FmWebService.prototype.tagDelete = function() {
+}
+
+/*******************************FmTagConstructor****************************/
+function FmTagHtmlBuilder() {
+}
+FmTagHtmlBuilder.prototype.toHtml = function(tags) {
+    var htmlToInsert = [];
+    var l = tags.length;
+    for(var i = 0; i < l; ++i) {
+        var e = tags[i]
+        htmlToInsert.push('<li class="entry clickable"><h3 class="tag">' + 
+                           e.name+ '</h3><h3 class="num">'+e.num+'</h3></li>');
+    }
+    return htmlToInsert.join('');
 }
 /*******************************FmResultConstructor****************************/
 function FmResultHtmlBuilder() {
