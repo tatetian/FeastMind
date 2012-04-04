@@ -930,7 +930,7 @@ FmTagHtmlBuilder.prototype.toHtml = function(tags) {
 }
 /*******************************FmResultConstructor****************************/
 function FmResultHtmlBuilder() {
-    this.MONTH_STR = ['JAN', 'FEB', 'MAR', 'APR', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    this.MONTH_STR = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     this.init();
 }
 FmResultHtmlBuilder.prototype.init = function() {
