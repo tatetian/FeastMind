@@ -234,12 +234,17 @@ FmTopPanel.prototype.init = function() {
         })
     });
     $(".tags .search").change(function(){
-        //$(".tags .search").val();
+        if($(".tags .search").val()==""){
+              that.showTags(that.tags);
+              return;
+        }
+        var tmp = new Array();
         for(var i = 0; i< that.tags.length ; i++){
-            if(that.tags[i].name.indexOf($(".tags .search").val())<0){
-                alert("Oh!");
+            if(that.tags[i].name.toLowerCase().indexOf($(".tags .search").val().toLowerCase())>=0){
+                  tmp.push(that.tags[i]);
             }
         }
+        that.showTags(tmp);
     })
 }
 FmTopPanel.prototype.showTags = function(tags) {
