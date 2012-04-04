@@ -37,7 +37,7 @@ FmManager.prototype.init = function() {
     this.topPanel.clickLeftBtn(slideView);
     this.mainPanel.clickRightBtn(slideView);
     // load data
-    this.search("all", null);
+    this.search("All", null);
 }
 FmManager.prototype.showLoading = function() {
     this.elements.$loader.fadeIn();
@@ -141,15 +141,14 @@ FmTopPanel.prototype.init = function() {
      $(document).keydown(function(){ 
         if(event.keyCode == 13) {
           if(that.cached.btns.$search.width()==160){
-              var tag = that.manager.lastSearch.tag;
-              that.manager.lastSearch.keywords = that.cached.btns.$search.val();
+              //alert("OK");
+              var tag = that.manager.state.lastSearch.tag;
+              that.manager.state.lastSearch.keywords = that.cached.btns.$search.val();
               
               that.manager.mainPanel.clearResult();
               that.manager.showLoading(); 
-              that.manager.mainPanel.showResult(response.result);
-              that.manager.hideLoading();
               that.manager.start = 0;
-              that.manager.webService.docsSearch(tag, that.manager.lastSearch.keywords,that.manager.start,that.manager.limit, function(response) {
+              that.manager.webService.docsSearch(tag, that.manager.state.lastSearch.keywords,that.manager.start,that.manager.limit, function(response) {
                   if(!response.error) {
                         that.manager.mainPanel.showResult(response.result);
                         that.manager.hideLoading();
@@ -165,7 +164,7 @@ FmTopPanel.prototype.init = function() {
     this.updateHeight();
     // click entry event
     var additionalClass = {
-        All: 'all',
+        All: 'All',
         Recent: 'recent' 
     };
     this.cached.$me.delegate(this.elements.entry, "fmClick", function() {
@@ -728,6 +727,28 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
             ]
         }
     };
+    if(tag!="All"){
+      for(var i = 0; i < response.result.entries.length; i++) {
+          var e = response.result.entries[i];
+          var str = e.tags.join(",");
+          //alert(str.indexOf(tag)+" "+str);
+          if(str.indexOf(tag)<0){
+              response.result.entries.splice(i,1);
+              i--;
+          }
+      }
+    }
+    if(keywords!=null){
+        for(var i = 0; i < response.result.entries.length; i++) {
+          var e = response.result.entries[i];
+          //alert(str.indexOf(tag)+" "+str);   
+          alert(keywords);
+          if(e.title.join("").indexOf(keywords)<0 && e.authors.join(",").indexOf(keywords)<0){
+                alert(keywords);
+          }
+      }
+    }
+    //if(keywords!=null)alert(keywords);
     setTimeout(function() {
         callback(response);
     }, 1000);
