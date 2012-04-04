@@ -20,7 +20,7 @@ function FmManager() {
         $loader: $("body > .loading")
     };
     this.start = 0;
-    this.limit = 10;
+    this.limit = 5;
 }
 FmManager.prototype.init = function() {
     // init components
@@ -126,6 +126,30 @@ function FmTopPanel(manager) {
                 {  
                     name: "VLDB",
                     num: 0
+                },
+                {
+                    name: "Computer Vision",
+                    num: 6
+                },
+                {
+                    name: "Single-Camera",
+                    num: 1
+                },
+                {
+                    name: "Human Motion",
+                    num: 2
+                },
+                {
+                    name: "Tracking",
+                    num: 2
+                },
+                {
+                    name: "Monocular",
+                    num: 1
+                },
+                {
+                    name: "Human Pose",
+                    num: 3
                 }
             ];
     //show tag
@@ -766,25 +790,70 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
             sortedBy: "addedOn",
             total: 9,
             entries: [
-                {   docId: "1111111",
-                    title: "Zephyr: Live Migration in Shared Nothing Databases for Elastic Cloud Platforms",
-                    authors: "Peter Bakkum, Kevin Skadron", 
-                    publication: "SIGMOD 2011",
+                   {  docId: "777777",
+                    title: "Real-Time Human Pose Recognition in Parts from Single Depth Images", 
+                    authors: "Jamie Shotton,Andrew Fitzgibbon,Mat Cook,Toby Sharp,Mark Finocchio,Richard Moore,Alex Kipman,Andrew Blake", 
+                    publication: "",
                     year: "2011",
-                    addedOn: "Feb 19 2012",
-                    tags: ["live migration", "SIGMOD'11"] },
-                {   docId: "2222222",
-                    title: "Brighthouse: An Analytic Data Warehouse for Ad-hoc Queries", 
-                    authors: "Dominik Slezak, Jakub Wroblewski, Victoria Eastwood, Piotr Synak", 
-                    publication: "VLDB '09", 
-                    addedOn: "Feb 19 2012",
-                    tags: ["column store", "VLDB'09"] },
-                {   docId: "3333333",
-                    title: "The End of an Architectural Era", 
-                    authors: "Michael Stonebraker, Samuel Madden, Daniel J. Abadi", 
-                    publication: "VLDB '07", 
-                    addedOn: "Feb 19 2012",
-                    tags: ["column store"] } 
+                    addedOn: "Apr 4 2012",
+                    tags: ["Computer Vision", "Human Pose"] },
+                    {
+                        docId: "888888",
+                        title: "Human Body Pose Recognition Using Spatio-Temporal Templates", 
+                        authors: "M. Dimitrijevic,V. Lepetit,P. Fua", 
+                        publication: "",
+                        addedOn: "Apr 4 2012",
+                        tags: ["Computer Vision", "Human Pose"] 
+                    },
+                    {
+                        docId: "999999",
+                        title: "Motion segmentation and pose recognition with motion history gradients", 
+                        authors: "Gary R. Bradski,James W. Davis", 
+                        publication: "",
+                        year:"2002",
+                        addedOn: "Apr 4 2012",
+                        tags: ["Computer Vision", "Human Motion", "Human Pose"] 
+                    },
+                 {  docId: "444444",
+                    title: "Bayesian Reconstruction of 3D Human Motion from Single-Camera Video", 
+                    authors: "Nicholas R. Howe,Michael E. Leventon,William T. Freeman", 
+                    publication: "",
+                    year: "1999",
+                    addedOn: "Mar 23 2012",
+                    tags: ["Computer Vision", "Single-Camera","Human Motion"] },
+                  {  docId: "555555",
+                    title: "Monocular 3–D Tracking of the Golf Swing", 
+                    authors: "Raquel Urtasun,David J. Fleet,Pascal Fua", 
+                    publication: "",
+                    year: "2005",
+                    addedOn: "Mar 9 2012",
+                    tags: ["Computer Vision", "Monocular","Tracking"] },
+                   {  docId: "666666",
+                    title: "3D ARM MOVEMENT TRACKING USING ADAPTIVE PARTICLE FILTER", 
+                    authors: "RFeng Guo,Gang Qian", 
+                    publication: "",
+                    year: "2009",
+                    addedOn: "Mar 2 2012",
+                    tags: ["Computer Vision", "ARM","Tracking"] },
+                    {   docId: "1111111",
+                        title: "Zephyr: Live Migration in Shared Nothing Databases for Elastic Cloud Platforms",
+                        authors: "Peter Bakkum, Kevin Skadron", 
+                        publication: "SIGMOD 2011",
+                        year: "2011",
+                        addedOn: "Feb 19 2012",
+                        tags: ["live migration", "SIGMOD'11"] },
+                    {   docId: "2222222",
+                        title: "Brighthouse: An Analytic Data Warehouse for Ad-hoc Queries", 
+                        authors: "Dominik Slezak, Jakub Wroblewski, Victoria Eastwood, Piotr Synak", 
+                        publication: "VLDB '09", 
+                        addedOn: "Feb 19 2012",
+                        tags: ["column store", "VLDB'09"] },
+                    {   docId: "3333333",
+                        title: "The End of an Architectural Era", 
+                        authors: "Michael Stonebraker, Samuel Madden, Daniel J. Abadi", 
+                        publication: "VLDB '07", 
+                        addedOn: "Feb 19 2012",
+                        tags: ["column store"] }
             ]
         }
     };
@@ -818,6 +887,11 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
           }
       }
     }
+    
+    response.result.total = response.result.entries.length;
+    
+    response.result.entries = response.result.entries.slice(start,start+limit);  
+     
     //if(keywords!=null)alert(keywords);
     setTimeout(function() {
         callback(response);
