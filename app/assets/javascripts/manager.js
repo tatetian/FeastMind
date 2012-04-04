@@ -840,18 +840,11 @@ FmUploader.prototype.init = function() {
             that.state.uploading = file.id;
             that.startMessage(filename);
             that.uploader.start();
-            /*setTimeout(function() {
-                that.uploader.trigger('UploadProgress', {id: file.id, percent: 50});
-            }, 500);
-            setTimeout(function() {
-                that.uploader.trigger('UploadProgress', {id: file.id, percent: 100});
-                that.uploader.trigger('UploadComplete', file);
-            }, 1000);*/
         }
     });
 
     this.uploader.bind('UploadProgress', function(up, file) {
-        if (that.state.uploading = file.id) {
+        if (that.state.uploading == file.id) {
             console.log('uploadprogress' + file.percent);
             that.progressMessage(file.percent);
         }
@@ -880,12 +873,7 @@ FmUploader.prototype.initDragAndDrop = function() {
     droparea.addEventListener("dragexit", noOpHandler, false);
     droparea.addEventListener("dragover", noOpHandler, false);
     droparea.addEventListener("drop", function() {
-        alert("drop");     
     }, false);
-
-/*    $("#add_file_btn input").bind("change", function(e) {
-      uploader.uploadFiles(e.target.files);
-    }) ;     */
 }
 FmUploader.prototype.startMessage = function(filename) {
 	this.state.progress = 0;
@@ -907,14 +895,14 @@ FmUploader.prototype.progressMessage = function(percent) {
     $message = $result.find('.message > p > span > span');
 	$progress = $result.find('.progress');
     console.debug('width='+$message.width());
-	$progress.animate({'width': percent / 100.0 * ( $message.width()+64-8 ) });
+	$progress.animate({'width': percent / 100.0 * ( $message.width()+64-8 ) }, 300);
 }
 FmUploader.prototype.completeMessage = function(filename) {
 	$result = this.manager.mainPanel.elements.$result;
 	$file = $result.find('.file');
 	$file.html('Uploaded ' + filename);
 	$message = $result.find('.message');
-	$message.delay(1000).fadeOut(400, function() {$message.detach();});
+	$message.fadeOut(400, function() {alert(1);$message.detach();});
 }
 /******************************Initialization********************************/
 // disable text selection in IE by setting attribute unselectable to true

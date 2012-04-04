@@ -4,7 +4,7 @@
 $(document).ready(function() {
     $("#preloader").hide();
 
-    $.get("/uploads/1468813003/text.json", {}, function(data) {
+    $.get("/uploads/1092187933/text.json", {}, function(data) {
         reader.init(data);
     }, "json"); 
 });

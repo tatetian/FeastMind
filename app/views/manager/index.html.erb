@@ -99,10 +99,13 @@
     <li class="entry-details slide secondary">
         <div class="wrapper">
             <div style="width:100%;height:4em;"></div>
-                <div class="paper-cover">
-                    <img class="paper-cover" src="/assets/sample-paper-cover.png">
-                </div>
-                <div class="title"><h5>Abstract<span class="nip"></span></h5></div>
+                
+            <div class="paper-cover">
+                <a href="/reader" target="_blank">
+                  <img class="paper-cover" src="/assets/sample-paper-cover.png" style="width:275px;">
+                </a>
+            </div>
+              <div class="title"><h5>Abstract<span class="nip"></span></h5></div>
                 <p><span class="first-letter"><span>P</span></span>rior work has shown dramatic acceleration for various data-base operations on GPUs, but only using primitives that are not part of conventional database languages such as SQL. This paper implements a subset of the SQLite virtual ma- chine directly on the GPU, accelerating SQL queries by ex- ecuting in parallel on GPU hardware. This dramatically reduces the effort required to achieve GPU acceleration by avoiding the need for database programmers to use new pro-gramming languages such as CUDA or modify their pro-grams to use non-SQL libraries.</p>
 
                 <p>This paper focuses on accelerating SELECT queries and describes the considerations in an efficient GPU implemen-tation of the SQLite command processor. Results on an NVIDIA Tesla C1060 achieve speedups of 20-70x depend-ing on the size of the result set. This work is compared to the alternative query platforms developed recently, such as MapReduce implementations, and future avenues of research in GPU data processing are described.</p>
