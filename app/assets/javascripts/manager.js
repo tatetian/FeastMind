@@ -1058,7 +1058,6 @@ FmUploader.prototype.init = function() {
 
     this.uploader.bind('UploadProgress', function(up, file) {
         if (that.state.uploading == file.id) {
-            console.log('uploadprogress' + file.percent);
             that.progressMessage(file.percent);
         }
     });
@@ -1067,7 +1066,7 @@ FmUploader.prototype.init = function() {
         console.log('queuechanged');
     });
 
-    this.uploader.bind('UploadComplete', function(up, file) {
+    this.uploader.bind('FileUploaded', function(up, file) {
         if (that.state.uploading == file.id) {
             that.state.uploading = false;
             that.completeMessage(file.name);
@@ -1095,7 +1094,7 @@ FmUploader.prototype.startMessage = function(filename) {
 	$first = $result.children(':first');
 	$first.append(
 		'<div class="message"><p>' +  
-			'<span><span class="file"> Uploading ' + filename + '</span>' + 
+			'<span><span class="file">Uploading ' + filename + '</span>' + 
 				'<span class="progress"></span></span>' +  
 		'</p></div>');
 }
@@ -1107,15 +1106,12 @@ FmUploader.prototype.progressMessage = function(percent) {
 	$result = this.manager.mainPanel.elements.$result;
     $message = $result.find('.message > p > span > span');
 	$progress = $result.find('.progress');
-    console.debug('width='+$message.width());
-	$progress.animate({'width': percent / 100.0 * ( $message.width()+64-8 ) }, 300);
+	$progress.animate({'width': percent / 100.0 * ( $message.width()+64) }, 300);
 }
 FmUploader.prototype.completeMessage = function(filename) {
 	$result = this.manager.mainPanel.elements.$result;
-	$file = $result.find('.file');
-	$file.html('Uploaded ' + filename);
 	$message = $result.find('.message');
-	$message.fadeOut(400, function() {alert(1);$message.detach();});
+    $message.delay(1000).fadeOut(400, function() {$message.remove();});
 }
 /******************************Initialization********************************/
 // disable text selection in IE by setting attribute unselectable to true
