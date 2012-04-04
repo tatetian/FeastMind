@@ -221,7 +221,7 @@ FmTopPanel.prototype.init = function() {
     this.updateHeight();
     // click entry event
     var additionalClass = {
-        All: 'All',
+        All: 'all',
         Recent: 'recent',
         MyShare: 'heart-icon myshare',
         MyFriends:'group-icon friends'
@@ -237,6 +237,7 @@ FmTopPanel.prototype.init = function() {
             that.manager.searchFr();
         }
         else if(tag=='MyShare'){
+            that.manager.search("!@!#$", null);
         }
         else if(tag=='Recent'){
         }
@@ -1076,18 +1077,51 @@ FmTagHtmlBuilder.prototype.toHtml = function(tags) {
 function FmFrHtmlBuilder() {
 }
 FmFrHtmlBuilder.prototype.toHtml = function(entries) {
+    var user = [
+        {
+            image:"head1.jpeg",
+            name:"Jason",
+            date: "2012.04.04 &nbsp;09:20"
+        },
+        {
+            image:"head2.jpeg",
+            name:"Ryan",
+            date: "2012.03.24 &nbsp;14:35"
+        },
+        {
+            image:"head3.png",
+            name:"Jack",
+            date: "2012.03.24 &nbsp;10:24"
+        },
+        {
+            image:"head4.jpeg",
+            name:"Adam",
+            date: "2012.03.21 &nbsp;09:39"
+        },
+        {
+            image:"head5.png",
+            name:"Jonny",
+            date: "2012.03.02 &nbsp;11:07"
+        }
+    ];
     var rightBtnHtml = '<ul class="buttons"><li class="button arrow-right-icon"></li></ul>';
     var htmlToInsert = [];
     var l = entries.length;
     var unselectable = " unselectable=on";
-    for(var i = 0; i < l; ++i) {
+    for(var i = 0; i < 5; ++i) {
         var e = entries[i];
         htmlToInsert.push('<div class="entry clickable" ' + unselectable + '>');
-        htmlToInsert.push('<div class="info"' + unselectable + '>');
-        htmlToInsert.push('<h4' + unselectable + '><em' + unselectable + '>' + e.title + '</em></h4>');
-        if(e.authors) {
-            htmlToInsert.push('<p' + unselectable + '>' + e.authors + 
-                (e.publication? '. ' + e.publication : '') + '</p>');
+        htmlToInsert.push('<div class="friends-info"><img  src="/assets/'+user[i].image+'" width="36" heigt="36"/></div>');
+        htmlToInsert.push('<div class="info mf"' + unselectable + '>');
+        htmlToInsert.push('<p class="info-detail"><span class="who">'+user[i].name+'</span>:<span class="when">&nbsp;'+user[i].date+'</span></p>');
+        htmlToInsert.push('<h4 class="mf"' + unselectable + '><em' + unselectable + '>' + e.title + '</em></h4>');
+        var k = e.tags.length;
+        if(k > 0) {
+            htmlToInsert.push('<p class="info-tags" ' + unselectable + '>');
+            for(var j = 0; j < k; ++j) {
+                htmlToInsert.push('<span class="tag"' + unselectable + '>' + e.tags[j] + '</span>');
+            }
+            htmlToInsert.push('</p>');
         }
         htmlToInsert.push('</div>'); 
         htmlToInsert.push(rightBtnHtml);

@@ -892,3 +892,48 @@ font-family: Helvetica,Arial;
 
 	
 }
+
+.friends-info{
+	left:0px;
+	top:0px;
+	position:relative;
+	float:left;
+	height:32px;
+	width:32px;
+}
+.result .entry .info .who {
+	font-size:20px;
+	font-weight:bold;
+	color:#09C;
+	
+}
+.result .entry .info .when {
+	font-size:12px;
+	
+	color: #333;
+	
+}
+.result .entry .info .action{
+	font-size:16px;
+	font-weight:bold;
+	color: #09C;
+	
+}
+.result .entry .info .mf {
+	margin-top:4px;
+	margin-left:50px;
+}
+.result .entry .info .info-detail {
+	margin-top:0px;
+	margin-left:50px;
+	
+}
+.result .entry .info .info-tags{
+	margin-top:5px;
+	
+	display:block;
+	padding:0px;
+	margin-left:50px;
+	
+	
+}
