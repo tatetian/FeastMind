@@ -1,5 +1,9 @@
 FeastMind::Application.routes.draw do
+  get "reader/index"
+
   get "manager/index"
+
+  match 'reader' => 'reader#index'
 
   match 'manager' => 'manager#index' 
 
