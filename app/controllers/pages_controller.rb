@@ -3,6 +3,8 @@ class PagesController < ApplicationController
   end
   def try_upload
   end
+  def login
+  end
   def upload
     # doc hash
     hash = _doc_hash 
