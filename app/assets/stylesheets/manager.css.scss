@@ -521,7 +521,9 @@ body > .loading {
     -moz-transition: all 0.4s ease 0s;
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
+    
 }
+
 .search:focus {
     outline: 0;
 }
@@ -873,4 +875,20 @@ div.paper-cover > img {
 }
 .upload-icon {
     background: url(/assets/upload.png) no-repeat center center;
+}
+.heart-icon{ 
+background: url(/assets/29-heart.png) no-repeat 0.15em center;
+font-family: Helvetica,Arial;
+    font-style: italic;
+    text-indent: 1.45em;
+	
+}
+.group-icon{ 
+
+background: url(/assets/112-group@2x.png) no-repeat 0.15em center;
+font-family: Helvetica,Arial;
+    font-style: italic;
+    text-indent: 1.45em;
+
+	
 }
