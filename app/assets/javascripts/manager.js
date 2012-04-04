@@ -1046,19 +1046,35 @@ FmUploader.prototype.init = function() {
         console.log('init');
     });
 
+    var $progressBar = null;
+    var $progressEntry = null;
+    var $progressPercent = null;
     this.uploader.bind('FilesAdded', function(up, files) {
         if (files.length > 0) {
+            // filename
             var file = files[0];
             var filename  = file.name;
+            // show message
+            var $result = that.manager.mainPanel.elements.$result;
+    	    var $insertPos = $($result.children()[1]);
+            $progressEntry = $('<div class="entry progress"><div class="info"><h4><em>Uploading file ' + filename +'<span class="percent">0%</span></em></h4></div>');
+            $progressPercent = $progressEntry.find(".percent")
+            $progressBar = $('<div style="position:absolute;top:0px;left:0px;z-index:-1;background: url(/assets/bg-tile-blue.png) repeat center top;height:100%;width:0px;"></div>');
+            $progressEntry.append($progressBar);
+            $progressEntry.insertAfter($insertPos); 
+            // start upload
             that.state.uploading = file.id;
-            that.startMessage(filename);
             that.uploader.start();
         }
     });
 
     this.uploader.bind('UploadProgress', function(up, file) {
         if (that.state.uploading == file.id) {
-            that.progressMessage(file.percent);
+            var percent = file.percent;
+            var $result =  that.manager.mainPanel.elements.$result;
+            var w = $result.width();
+            $progressBar.animate({"width": percent / 100.0 * w + "px"})
+            $progressPercent.text(percent + "%");
         }
     });
 
@@ -1069,7 +1085,11 @@ FmUploader.prototype.init = function() {
     this.uploader.bind('FileUploaded', function(up, file) {
         if (that.state.uploading == file.id) {
             that.state.uploading = false;
-            that.completeMessage(file.name);
+            var fileName = file.name;
+
+            $progressEntry.delay(1000).slideToggle(400, function() {
+                $progressEntry.remove();
+            });
         }
     });
 
@@ -1087,16 +1107,12 @@ FmUploader.prototype.initDragAndDrop = function() {
     droparea.addEventListener("drop", function() {
     }, false);
 }
-FmUploader.prototype.startMessage = function(filename) {
+/*
+FmUploader.prototype.upload = function(filename) {
 	this.state.progress = 0;
 	
 	$result = this.manager.mainPanel.elements.$result;
 	$first = $result.children(':first');
-	$first.append(
-		'<div class="message"><p>' +  
-			'<span><span class="file">Uploading ' + filename + '</span>' + 
-				'<span class="progress"></span></span>' +  
-		'</p></div>');
 }
 FmUploader.prototype.progressMessage = function(percent) {
 	if ( this.state.progress >= percent )
@@ -1112,7 +1128,7 @@ FmUploader.prototype.completeMessage = function(filename) {
 	$result = this.manager.mainPanel.elements.$result;
 	$message = $result.find('.message');
     $message.delay(1000).fadeOut(400, function() {$message.remove();});
-}
+}*/
 /******************************Initialization********************************/
 // disable text selection in IE by setting attribute unselectable to true
 function disableIETextSelection(root){
@@ -1123,6 +1139,7 @@ function disableIETextSelection(root){
     for(var i = 0; i < l ; ++i)
         disableIETextSelection(children[i]);
 }
+var Manager;
 $(document).ready(function() {
     // init manager
     var manager = new FmManager();
@@ -1130,6 +1147,13 @@ $(document).ready(function() {
     // misc.
     if ($.browser.msie) 
         disableIETextSelection($("#top-panel")[0]); 
-});
 
+    Manager = manager ;
+});
+function progress(){
+  var $entry = $("#main > .slide.primary > .result > :nth-child(2)");
+  var $progress = $('<div style="position:absolute;top:0px;left:0px;z-index:-1;background: url(/assets/bg-tile-blue.png) repeat center top;height:100%;width:20%;"></div>');
+  $entry.insertAfter($progress);
+  return $entry;
+}
 

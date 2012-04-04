@@ -696,7 +696,6 @@ body > #main div.title > h5 > span.nip {
     /*min-height: 6em;*/
     padding: 0.8em 0.125em;
     position: relative;
-    min-height: 26px;
 }
 .result .entry.first {
     border-top: none;
@@ -708,7 +707,7 @@ body > #main div.title > h5 > span.nip {
     background: url(/assets/bg-tile-light.png) repeat center top;
     color: #6EB3D1; 
 }
-.result .entry .info {
+.result .entry:not(.progress) .info {
     margin-right: 3em;
 }
 .result .entry .buttons {
@@ -874,4 +873,7 @@ div.paper-cover > img {
 }
 .upload-icon {
     background: url(/assets/upload.png) no-repeat center center;
+}
+.entry .percent {
+  float: right;
 }
