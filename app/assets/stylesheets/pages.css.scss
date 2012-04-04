@@ -13,6 +13,7 @@ span.blue {
 body {
     background: #E1E1E1 url(/assets/hatch.png) repeat fixed;
     font: normal 100% ClarendonFSLight, Georgia, Helvetica, Arial;
+    position: relative;
 }
 body > .container {
     margin: 0 auto;
@@ -101,5 +102,72 @@ h3 {
 #signup {
     padding: 15px 0;
     width: 580px;
+}
+.login{
+	position:absolute;
+    left:50%;
+    top:50%;
+	margin-left:-280px;
+	margin-top:-150px;
+	width:561px;
+	height:241px;
+	background: url(/assets/login_bg.png) no-repeat center;
+    color: white;
+}
+.login h1 {
+    font-size: 1.5em;
+    line-height: 1.5;
+}
+.login form{
+	position:relative;
+	text-align:left;
+	width:281px;
+	left:40px;
+	top:15px;
+}
+.login form  h{
+	color: #09C;
+	font-family: Helvetica,Arial;
+	font-size:18px;
+	font-weight:bold;
+}
+.login p{
+	margin-top:8px;
+}	
+.username label,.password label{	
+    text-align:left;
+    color:#FFF;
+    font-family: Helvetica,Arial;
+	font-size:14px;
+}
+.username input,.password input{
+    margin-top:3px;
+    width:221px;
+    height:30px;
+    line-height:26px;
+    color:#999;
+    text-align:left;
+    border-radius:5px;
+    color: black;
+    font-family: Helvetica,Arial;
+	font-size:14px;
+}
+.login .remember a{
+	color:#09C;
+	text-decoration:underline;
+}
+.btn-login-submit{
+    margin-left:10px;
+    background: url(/assets/btn_login_submit.png) no-repeat center;
+    width:73px;
+    height:31px;
+    cursor:pointer;
+}
+.login-right{
+    position: relative;
+    top:-150px;
+    left:300px;
+    width:180px;
+    color:#09C;
 }
 

@@ -182,10 +182,11 @@ h2 {
     font-size: 2em;
 }
 h3 {
-    font-size: 1.6em;
+    font-size: 1.4em;
+    line-height: 1.8;
 }
 h4 {
-    font-size: 1.4em;
+    font-size: 1.25em;
 }
 h5 {
     font-size: 0.75em;
@@ -697,7 +698,6 @@ body > #main div.title > h5 > span.nip {
     /*min-height: 6em;*/
     padding: 0.8em 0.125em;
     position: relative;
-    min-height: 26px;
 }
 .result .entry.first {
     border-top: none;
@@ -709,7 +709,7 @@ body > #main div.title > h5 > span.nip {
     background: url(/assets/bg-tile-light.png) repeat center top;
     color: #6EB3D1; 
 }
-.result .entry .info {
+.result .entry:not(.progress) .info {
     margin-right: 3em;
 }
 .result .entry .buttons {
@@ -876,6 +876,7 @@ div.paper-cover > img {
 .upload-icon {
     background: url(/assets/upload.png) no-repeat center center;
 }
+
 .heart-icon{ 
 background: url(/assets/29-heart.png) no-repeat 0.15em center;
 font-family: Helvetica,Arial;
@@ -934,6 +935,8 @@ font-family: Helvetica,Arial;
 	display:block;
 	padding:0px;
 	margin-left:50px;
+}
 	
-	
+.entry .percent {
+  float: right;
 }
