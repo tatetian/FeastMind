@@ -233,7 +233,7 @@ FmTopPanel.prototype.init = function() {
             }
         })
     });
-    $(".tags .search").change(function(){
+    /*$(".tags .search").change(function(){
         if($(".tags .search").val()==""){
               that.showTags(that.tags);
               return;
@@ -245,7 +245,33 @@ FmTopPanel.prototype.init = function() {
             }
         }
         that.showTags(tmp);
-    })
+    })*/
+    
+    var setJsUserName = function()
+    {
+        //alert($(".tags .search").val());
+        if($(".tags .search").val()==""){
+              that.showTags(that.tags);
+              return;
+        }
+        var tmp = new Array();
+        for(var i = 0; i< that.tags.length ; i++){
+            if(that.tags[i].name.toLowerCase().indexOf($(".tags .search").val().toLowerCase())>=0){
+                  tmp.push(that.tags[i]);
+            }
+        }
+        that.showTags(tmp);
+    }
+    
+    if($.browser.msie)    // IE浏览器
+    {
+        //alert("ie");
+        $(".tags .search").get(0).onpropertychange = setJsUserName;
+    }
+    else    // 其他浏览器
+    {
+        $(".tags .search").get(0).addEventListener("input",setJsUserName,false);
+    }
 }
 FmTopPanel.prototype.showTags = function(tags) {
     var $result = $(".tags .entries");
