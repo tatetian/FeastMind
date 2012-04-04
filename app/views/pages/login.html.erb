@@ -1,7 +1,22 @@
 <div class="container">
   <div class="wrapper">
     <div class="login ">
-	  <form action="/manager">
+      <%= form_tag("/validate_login", :method => "post") do %>
+        <h1>Login</h1>
+        <p class="username">
+          <%= label_tag(:username, "Username:") %><br />
+          <%= text_field_tag(:username, "tatetian") %>
+        </p>
+        <p class="password ">
+          <%= label_tag(:password, "Password:") %><br />
+          <%= password_field_tag(:password, "asdf1234") %>
+		</p>
+      	<p class="remember">
+          <span><%= check_box_tag(:remember_me, "remember", true) %> <a>Remember me</a> </span>
+          <%= submit_tag("", :class => "btn-login-submit") %>
+        </p>
+      <% end %>
+<!--	  <form action="/manager" method=>
         <h1>Login</h1>
             <p class="username">
               <label>Username: </label><br />
@@ -15,7 +30,7 @@
 				<span><input type="checkbox" value="" checked /><a>Remember me</a></span>
 				<input type="submit" value="" class="btn-login-submit" />
 			</p>
-	  </form>
+          </form>-->
       <div class="login-right ">
         <h1> BY renren</h1>
       </div>

@@ -5,6 +5,10 @@ class PagesController < ApplicationController
   end
   def login
   end
+  def validate_login
+    sleep 1.5
+    redirect_to "/manager"
+  end
   def upload
     # doc hash
     hash = _doc_hash 

@@ -9,6 +9,8 @@ FeastMind::Application.routes.draw do
 
   match 'login' => 'pages#login'
 
+  match 'validate_login' => 'pages#validate_login'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
