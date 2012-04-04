@@ -8,7 +8,7 @@ class PagesController < ApplicationController
     hash = _doc_hash 
     # save file
     uploaded_io = params[:file]
-    output_dir  = Rails.root.join 'uploads', hash.to_s
+    output_dir  = Rails.root.join 'public', 'uploads', hash.to_s
     Dir.mkdir output_dir
     output_file = [output_dir, "uploaded.pdf"].join("/")
     File.open(output_file, 'wb') do |file|
@@ -22,6 +22,10 @@ class PagesController < ApplicationController
     output_file.write doc_text
     # extract meta
     doc_meta = %x[app/tools/json2meta #{text_file}]
+    # add doc id
+    parsed_meta = ActiveSupport::JSON.decode doc_meta
+    parsed_meta["id"] = hash
+    doc_meta = ActiveSupport::JSON.encode parsed_meta 
     #json_response = {:file_name => uploaded_io.original_filena
     respond_to do |format| 
       format.html { head :no_content }
