@@ -784,6 +784,7 @@ function FmUploader(manager) {
     this.manager = manager;
     this.elements = {
         uploadBtn: 'upload-btn',
+        dragAndDropArea: $.browser.msie || $.browser.mozilla || $.browser.opera ? "html" : "body"
     };
     this.state = {
         uploading: false,
@@ -844,6 +845,25 @@ FmUploader.prototype.init = function() {
             that.completeMessage(file.name);
         }
     });
+
+    this.initDragAndDrop();
+}
+FmUploader.prototype.initDragAndDrop = function() {
+    var droparea = $(this.elements.dragAndDropArea)[0];
+    var noOpHandler = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    droparea.addEventListener("dragenter", noOpHandler, false);
+    droparea.addEventListener("dragexit", noOpHandler, false);
+    droparea.addEventListener("dragover", noOpHandler, false);
+    droparea.addEventListener("drop", function() {
+        alert("drop");     
+    }, false);
+
+/*    $("#add_file_btn input").bind("change", function(e) {
+      uploader.uploadFiles(e.target.files);
+    }) ;     */
 }
 FmUploader.prototype.startMessage = function(filename) {
 	this.state.progress = 0;
