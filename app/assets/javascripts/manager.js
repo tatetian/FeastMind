@@ -730,21 +730,30 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
     if(tag!="All"){
       for(var i = 0; i < response.result.entries.length; i++) {
           var e = response.result.entries[i];
-          var str = e.tags.join(",");
+          var tagfind = false;
+          for(var j = 0 ; j< e.tags.length ; j++){
           //alert(str.indexOf(tag)+" "+str);
-          if(str.indexOf(tag)<0){
-              response.result.entries.splice(i,1);
-              i--;
+              var str = e.tags[j];
+              if(str==tag){
+                  tagfind = true;
+                  break;
+              }
+          }
+          if(!tagfind){
+                response.result.entries.splice(i,1);
+                i--;
           }
       }
     }
     if(keywords!=null){
+        keywords = keywords.toLowerCase();
         for(var i = 0; i < response.result.entries.length; i++) {
           var e = response.result.entries[i];
           //alert(str.indexOf(tag)+" "+str);   
-          alert(keywords);
-          if(e.title.join("").indexOf(keywords)<0 && e.authors.join(",").indexOf(keywords)<0){
-                alert(keywords);
+          //alert(keywords);
+          if(e.title.toLowerCase().indexOf(keywords)<0 && e.authors.toLowerCase().indexOf(keywords)<0){
+                response.result.entries.splice(i,1);
+                i--;
           }
       }
     }
