@@ -19,6 +19,8 @@ function FmManager() {
     this.elements = {
         $loader: $("body > .loading")
     };
+    this.start = 0;
+    this.limit = 5;
 }
 FmManager.prototype.init = function() {
     // init components
@@ -35,7 +37,7 @@ FmManager.prototype.init = function() {
     this.topPanel.clickLeftBtn(slideView);
     this.mainPanel.clickRightBtn(slideView);
     // load data
-    this.search("all", null);
+    this.search("All", null);
 }
 FmManager.prototype.showLoading = function() {
     this.elements.$loader.fadeIn();
@@ -54,10 +56,12 @@ FmManager.prototype.search = function(tag, keywords) {
     this.showLoading();
     // do search
     var that = this;
-    this.webService.docsSearch(tag, keywords, function(response) {
+    this.start = 0;
+    this.webService.docsSearch(tag, keywords, this.start, this.limit , function(response) {
         if(!response.error) {
             that.mainPanel.showResult(response.result);
             that.hideLoading();
+            that.start = that.start + that.limit;
         }
         else {  // handle error
             
@@ -72,10 +76,11 @@ FmManager.prototype.more = function() {
     // do the search
     var that = this;
     this.mainPanel.showLoadingMore();
-    this.webService.docsSearch(tag, keywords, function(response) {
+    this.webService.docsSearch(tag, keywords,this.start, this.limit, function(response) {
         if(!response.error) {
             that.mainPanel.showMoreResult(response.result);
             that.mainPanel.hideLoadingMore();
+            that.start = that.start + that.limit;
         }
         else {  // handle error
             
@@ -112,6 +117,43 @@ function FmTopPanel(manager) {
             $addTag: $('#top .topbar .slide.primary .button.plus-icon')
         }
     };
+    //tags data
+    this.tags = [
+                {   
+                    name: "column store",
+                    num: 1
+                },
+                {  
+                    name: "VLDB",
+                    num: 0
+                },
+                {
+                    name: "Computer Vision",
+                    num: 6
+                },
+                {
+                    name: "Single-Camera",
+                    num: 1
+                },
+                {
+                    name: "Human Motion",
+                    num: 2
+                },
+                {
+                    name: "Tracking",
+                    num: 2
+                },
+                {
+                    name: "Monocular",
+                    num: 1
+                },
+                {
+                    name: "Human Pose",
+                    num: 3
+                }
+            ];
+    //show tag
+    this.tagHtmlBuilder =  new FmTagHtmlBuilder();
     // scroller
     var scrollContainer = $(this.elements.content).get(0);
     var scrollContent = $(this.elements.tabs).get(0);
@@ -136,29 +178,31 @@ FmTopPanel.prototype.init = function() {
      $(document).keydown(function(){ 
         if(event.keyCode == 13) {
           if(that.cached.btns.$search.width()==160){
+              //alert("OK");
+              var tag = that.manager.state.lastSearch.tag;
+              that.manager.state.lastSearch.keywords = that.cached.btns.$search.val();
+              
               that.manager.mainPanel.clearResult();
               that.manager.showLoading(); 
-              $.get(
-                "search",
-                {
-                  start:0,
-                  limit:10,
-                  keywords:that.cached.btns.$search.val()
-                 },
-                 function(response,status,xhr){
-                    // show loading
-                    that.mainPanel.showResult(response.result);
-                    that.hideLoading();
-                 },
-                 "json"
-               );
+              that.manager.start = 0;
+              that.manager.webService.docsSearch(tag, that.manager.state.lastSearch.keywords,that.manager.start,that.manager.limit, function(response) {
+                  if(!response.error) {
+                        that.manager.mainPanel.showResult(response.result);
+                        that.manager.hideLoading();
+                        that.manager.start = that.manager.start+that.manager.limit;
+                  }
+                  else {  // handle error
+                      
+                  }
+              });
             }
         }
     });  
+    this.showTags(this.tags);
     this.updateHeight();
     // click entry event
     var additionalClass = {
-        All: 'all',
+        All: 'All',
         Recent: 'recent' 
     };
     this.cached.$me.delegate(this.elements.entry, "fmClick", function() {
@@ -199,6 +243,67 @@ FmTopPanel.prototype.init = function() {
             that.cached.btns.$editTag.show();
         }
     });
+    that.cached.btns.$addTag.click(function(){
+        $(".tags .entries").append('<li class="entry clickable" id="newtag"><h3 class="tag"><input type="text" class="addtag" autocomplete="off"/></h3><h3 class="num">0</h3></li>');   
+        $(".addtag").focus();
+        $(".addtag").blur(function(){
+            if($(".addtag").val()!=""){
+                  //alert($(".addtag").val());
+                  $("#newtag").removeAttr("id")
+                  $(".addtag").replaceWith($(".addtag").val());
+            }
+            else{
+                $("#newtag").remove();
+            }
+        })
+    });
+    /*$(".tags .search").change(function(){
+        if($(".tags .search").val()==""){
+              that.showTags(that.tags);
+              return;
+        }
+        var tmp = new Array();
+        for(var i = 0; i< that.tags.length ; i++){
+            if(that.tags[i].name.toLowerCase().indexOf($(".tags .search").val().toLowerCase())>=0){
+                  tmp.push(that.tags[i]);
+            }
+        }
+        that.showTags(tmp);
+    })*/
+    
+    var setJsUserName = function()
+    {
+        //alert($(".tags .search").val());
+        if($(".tags .search").val()==""){
+              that.showTags(that.tags);
+              return;
+        }
+        var tmp = new Array();
+        for(var i = 0; i< that.tags.length ; i++){
+            if(that.tags[i].name.toLowerCase().indexOf($(".tags .search").val().toLowerCase())>=0){
+                  tmp.push(that.tags[i]);
+            }
+        }
+        that.showTags(tmp);
+    }
+    
+    if($.browser.msie)    // IE浏览器
+    {
+        //alert("ie");
+        $(".tags .search").get(0).onpropertychange = setJsUserName;
+    }
+    else    // 其他浏览器
+    {
+        $(".tags .search").get(0).addEventListener("input",setJsUserName,false);
+    }
+}
+FmTopPanel.prototype.showTags = function(tags) {
+    var $result = $(".tags .entries");
+     $(".tags .entry.clickable").remove();
+    // update counter
+    // build new result HTML elements
+    var resultHtml = this.tagHtmlBuilder.toHtml(tags);
+    $result.append(resultHtml);
 }
 FmTopPanel.prototype.toggle = function() {
     this.state.expanded = !this.state.expanded;
@@ -665,36 +770,129 @@ function FmWebService() {
         docsDelete: "docs/"
     };
 }
-FmWebService.prototype.docsSearch = function(tag, keywords, callback) {
-    var response = {
+FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callback) {
+    /*$.get(
+          "search",
+          {
+            start:start,
+            limit:limit,
+            keywords:keywords||""
+           },
+           function(response,status,xhr){
+              callback(response);
+           },
+           "json"
+     );*/
+     var response = {
         id: 1,
         error: null,
         result: {
             sortedBy: "addedOn",
             total: 9,
             entries: [
-                {   docId: "1111111",
-                    title: "Zephyr: Live Migration in Shared Nothing Databases for Elastic Cloud Platforms",
-                    authors: "Peter Bakkum, Kevin Skadron", 
-                    publication: "SIGMOD 2011",
+                   {  docId: "777777",
+                    title: "Real-Time Human Pose Recognition in Parts from Single Depth Images", 
+                    authors: "Jamie Shotton,Andrew Fitzgibbon,Mat Cook,Toby Sharp,Mark Finocchio,Richard Moore,Alex Kipman,Andrew Blake", 
+                    publication: "",
                     year: "2011",
-                    addedOn: "Feb 19 2012",
-                    tags: ["live migration", "SIGMOD'11"] },
-                {   docId: "2222222",
-                    title: "Brighthouse: An Analytic Data Warehouse for Ad-hoc Queries", 
-                    authors: "Dominik Slezak, Jakub Wroblewski, Victoria Eastwood, Piotr Synak", 
-                    publication: "VLDB '09", 
-                    addedOn: "Feb 19 2012",
-                    tags: ["column store", "VLDB'09"] },
-                {   docId: "3333333",
-                    title: "The End of an Architectural Era", 
-                    authors: "Michael Stonebraker, Samuel Madden, Daniel J. Abadi", 
-                    publication: "VLDB '07", 
-                    addedOn: "Feb 19 2012",
-                    tags: ["column store"] } 
+                    addedOn: "Apr 4 2012",
+                    tags: ["Computer Vision", "Human Pose"] },
+                    {
+                        docId: "888888",
+                        title: "Human Body Pose Recognition Using Spatio-Temporal Templates", 
+                        authors: "M. Dimitrijevic,V. Lepetit,P. Fua", 
+                        publication: "",
+                        addedOn: "Apr 4 2012",
+                        tags: ["Computer Vision", "Human Pose"] 
+                    },
+                    {
+                        docId: "999999",
+                        title: "Motion segmentation and pose recognition with motion history gradients", 
+                        authors: "Gary R. Bradski,James W. Davis", 
+                        publication: "",
+                        year:"2002",
+                        addedOn: "Apr 4 2012",
+                        tags: ["Computer Vision", "Human Motion", "Human Pose"] 
+                    },
+                 {  docId: "444444",
+                    title: "Bayesian Reconstruction of 3D Human Motion from Single-Camera Video", 
+                    authors: "Nicholas R. Howe,Michael E. Leventon,William T. Freeman", 
+                    publication: "",
+                    year: "1999",
+                    addedOn: "Mar 23 2012",
+                    tags: ["Computer Vision", "Single-Camera","Human Motion"] },
+                  {  docId: "555555",
+                    title: "Monocular 3–D Tracking of the Golf Swing", 
+                    authors: "Raquel Urtasun,David J. Fleet,Pascal Fua", 
+                    publication: "",
+                    year: "2005",
+                    addedOn: "Mar 9 2012",
+                    tags: ["Computer Vision", "Monocular","Tracking"] },
+                   {  docId: "666666",
+                    title: "3D ARM MOVEMENT TRACKING USING ADAPTIVE PARTICLE FILTER", 
+                    authors: "RFeng Guo,Gang Qian", 
+                    publication: "",
+                    year: "2009",
+                    addedOn: "Mar 2 2012",
+                    tags: ["Computer Vision", "ARM","Tracking"] },
+                    {   docId: "1111111",
+                        title: "Zephyr: Live Migration in Shared Nothing Databases for Elastic Cloud Platforms",
+                        authors: "Peter Bakkum, Kevin Skadron", 
+                        publication: "SIGMOD 2011",
+                        year: "2011",
+                        addedOn: "Feb 19 2012",
+                        tags: ["live migration", "SIGMOD'11"] },
+                    {   docId: "2222222",
+                        title: "Brighthouse: An Analytic Data Warehouse for Ad-hoc Queries", 
+                        authors: "Dominik Slezak, Jakub Wroblewski, Victoria Eastwood, Piotr Synak", 
+                        publication: "VLDB '09", 
+                        addedOn: "Feb 19 2012",
+                        tags: ["column store", "VLDB'09"] },
+                    {   docId: "3333333",
+                        title: "The End of an Architectural Era", 
+                        authors: "Michael Stonebraker, Samuel Madden, Daniel J. Abadi", 
+                        publication: "VLDB '07", 
+                        addedOn: "Feb 19 2012",
+                        tags: ["column store"] }
             ]
         }
     };
+    if(tag!="All"){
+      for(var i = 0; i < response.result.entries.length; i++) {
+          var e = response.result.entries[i];
+          var tagfind = false;
+          for(var j = 0 ; j< e.tags.length ; j++){
+          //alert(str.indexOf(tag)+" "+str);
+              var str = e.tags[j];
+              if(str==tag){
+                  tagfind = true;
+                  break;
+              }
+          }
+          if(!tagfind){
+                response.result.entries.splice(i,1);
+                i--;
+          }
+      }
+    }
+    if(keywords!=null){
+        keywords = keywords.toLowerCase();
+        for(var i = 0; i < response.result.entries.length; i++) {
+          var e = response.result.entries[i];
+          //alert(str.indexOf(tag)+" "+str);   
+          //alert(keywords);
+          if(e.title.toLowerCase().indexOf(keywords)<0 && e.authors.toLowerCase().indexOf(keywords)<0){
+                response.result.entries.splice(i,1);
+                i--;
+          }
+      }
+    }
+    
+    response.result.total = response.result.entries.length;
+    
+    response.result.entries = response.result.entries.slice(start,start+limit);  
+     
+    //if(keywords!=null)alert(keywords);
     setTimeout(function() {
         callback(response);
     }, 1000);
@@ -707,13 +905,28 @@ FmWebService.prototype.docsDetail = function() {
 }
 FmWebService.prototype.docsEdit = function() {
 }
-FmWebService.prototype.tagsList = function() {
+FmWebService.prototype.tagsList = function(callback) {
+      
 }
-FmWebService.prototype.tagAdd = function() {
+FmWebService.prototype.tagAdd = function(newtag) {
 }
 FmWebService.prototype.tagEdit = function() {
 }
 FmWebService.prototype.tagDelete = function() {
+}
+
+/*******************************FmTagConstructor****************************/
+function FmTagHtmlBuilder() {
+}
+FmTagHtmlBuilder.prototype.toHtml = function(tags) {
+    var htmlToInsert = [];
+    var l = tags.length;
+    for(var i = 0; i < l; ++i) {
+        var e = tags[i]
+        htmlToInsert.push('<li class="entry clickable"><h3 class="tag">' + 
+                           e.name+ '</h3><h3 class="num">'+e.num+'</h3></li>');
+    }
+    return htmlToInsert.join('');
 }
 /*******************************FmResultConstructor****************************/
 function FmResultHtmlBuilder() {
