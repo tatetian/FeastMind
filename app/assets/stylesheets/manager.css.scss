@@ -707,6 +707,11 @@ body > #main div.title > h5 > span.nip {
     padding: 0.8em 0.125em;
     position: relative;
 }
+.result .entry .friends-info {    
+    
+    position: absolute;
+top:15px;
+}
 .result .entry.last {
     border-bottom: none;
 }
@@ -975,22 +980,29 @@ div.paper-cover > img {
 	margin: 0em 0 0em;
     line-height: 1;}
 	
-.comment .comment-info {
-	width:850px;
-	top:0px;
-	position:relative;
+.comment .friends-info {
+   
+	top:17px;
+	position:absolute;
 	float:left;
 	left:8px;
+    
+	}
+.comment .comment-info {
+   
+	top:0px;
+	position:relative;
+	
+	left:15px;
     margin-right: 3em;
-	margin-left:8px;}	
+	margin-left:40px;}	
 	
 .comment .info-title{
 	padding:5px;
 	font-size:18px;
 	font-weight:bold;
-	color:#1b9cb8;
-	color: #585858;
 	
+    position:relative;
 	
 	}
 .comment .info-detail .who{
