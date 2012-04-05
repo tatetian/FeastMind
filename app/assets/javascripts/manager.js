@@ -491,8 +491,8 @@ FmMainPanel.prototype.showFrResult = function(result) {
     this.state.entriesTotal = result.total;
     // build new result HTML elements
     var resultHtml = this.frHtmlBuilder.toHtml(entries);
-    $result.append('<div style="width: 100%; padding-top: 3.5em;"></div>');
-    $result.append('<div style="width: 100%; padding-bottom: 0.5em;">')
+    $result.append('<div style="width: 100%; padding-top: 3.5em; position: relative; z-index: -1;"></div>');
+    $result.append('<div style="width: 100%; padding-bottom: 0.5em; position: relative; z-index: -1;"></div>')
     $result.append(resultHtml);
     // toggle more indicator
     this.appendMoreEntry();
@@ -510,8 +510,8 @@ FmMainPanel.prototype.showResult = function(result) {
     this.state.entriesTotal = result.total;
     // build new result HTML elements
     var resultHtml = this.resultHtmlBuilder.newHtml(entries);
-    $result.append('<div style="width: 100%; padding-top: 3.5em;"></div>');
-    $result.append('<div style="width: 100%; padding-bottom: 0.5em;">')
+    $result.append('<div style="width: 100%; padding-top: 3.5em;position: relative; z-index: -1;"></div>');
+    $result.append('<div style="width: 100%; padding-bottom: 0.5em;position: relative; z-index: -1;">')
     $result.append(resultHtml);
     // toggle more indicator
     this.appendMoreEntry();
@@ -829,6 +829,7 @@ function FmWebService() {
         docsUpload: "upload",
         docsDelete: "docs/"
     };
+    this.uploaded_entries = [];
 }
 FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callback) {
     /*$.get(
@@ -843,26 +844,19 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
            },
            "json"
      );*/
-     var response = {
-        id: 1,
-        error: null,
-        result: {
-            sortedBy: "addedOn",
-            total: 9,
-            entries: [
-                   {  docId: "777777",
+     var entries = [{  docId: "777777",
                     title: "Real-Time Human Pose Recognition in Parts from Single Depth Images", 
                     authors: "Jamie Shotton,Andrew Fitzgibbon,Mat Cook,Toby Sharp,Mark Finocchio,Richard Moore,Alex Kipman,Andrew Blake", 
                     publication: "",
                     year: "2011",
-                    addedOn: "Apr 4 2012",
+                    addedOn: "Apr 5 2012",
                     tags: ["Computer Vision", "Human Pose"] },
                     {
                         docId: "888888",
                         title: "Human Body Pose Recognition Using Spatio-Temporal Templates", 
                         authors: "M. Dimitrijevic,V. Lepetit,P. Fua", 
                         publication: "",
-                        addedOn: "Apr 4 2012",
+                        addedOn: "Apr 5 2012",
                         tags: ["Computer Vision", "Human Pose"] 
                     },
                     {
@@ -871,7 +865,7 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
                         authors: "Gary R. Bradski,James W. Davis", 
                         publication: "",
                         year:"2002",
-                        addedOn: "Apr 4 2012",
+                        addedOn: "Apr 5 2012",
                         tags: ["Computer Vision", "Human Motion", "Human Pose"] 
                     },
                  {  docId: "444444",
@@ -913,8 +907,15 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
                         authors: "Michael Stonebraker, Samuel Madden, Daniel J. Abadi", 
                         publication: "VLDB '07", 
                         addedOn: "Feb 19 2012",
-                        tags: ["column store"] }
-            ]
+                        tags: ["column store"] } ];
+     entries = this.uploaded_entries.concat(entries);
+     var response = {
+        id: 1,
+        error: null,
+        result: {
+            sortedBy: "addedOn",
+            total: entries.length,
+            entries: entries
         }
     };
     if(tag!="All"){
@@ -1181,12 +1182,36 @@ FmResultHtmlBuilder.prototype.decideTimeGroup = function(entry) {
         return this.MONTH_STR[date.getMonth()] + ' ' + this.getFullYear(); 
     }
 }
+FmResultHtmlBuilder.prototype.entryToHtml = function(e, firstInGroup) {
+    var rightBtnHtml = '<ul class="buttons"><li class="button arrow-right-icon"></li></ul>';
+    var unselectable = " unselectable=on";
+    var htmlToInsert = [];
+
+    htmlToInsert.push('<div class="entry clickable' + 
+                          (firstInGroup?' first"':'"') + unselectable + '>');
+    htmlToInsert.push('<div class="info"' + unselectable + '>');
+    htmlToInsert.push('<h4' + unselectable + '><em' + unselectable + '>' + e.title + '</em></h4>');
+    if(e.authors) {
+        htmlToInsert.push('<p' + unselectable + '>' + e.authors + 
+                          (e.publication? '. ' + e.publication : '') + '</p>');
+    }
+    var k = e.tags.length;
+    if(k > 0) {
+        htmlToInsert.push('<p' + unselectable + '>');
+        for(var j = 0; j < k; ++j) {
+            htmlToInsert.push('<span class="tag"' + unselectable + '>' + e.tags[j] + '</span>');
+        }
+        htmlToInsert.push('</p>');
+    }
+    htmlToInsert.push('</div>');
+    htmlToInsert.push(rightBtnHtml);
+    htmlToInsert.push('</div>'); 
+    return htmlToInsert.join(''); 
+}
 FmResultHtmlBuilder.prototype.toHtml = function(entries) {
     // According to www.learningjquery.com/2009/03/43439-reasons-to-use-append-correct
     // below is the fastest way to insert many HTML elements into DOM
-    var leftBtnHtml = '<ul class="buttons2"><li class="button fav"></li></ul>';
-    
-    var rightBtnHtml = '<ul class="buttons"><li class="button arrow-right-icon"></li></ul>';
+    //var leftBtnHtml = '<ul class="buttons2"><li class="button fav"></li></ul>';
     var htmlToInsert = [];
     var l = entries.length;
     var unselectable = " unselectable=on";
@@ -1200,29 +1225,7 @@ FmResultHtmlBuilder.prototype.toHtml = function(entries) {
             firstInGroup = true;
             this.lastGroup = group;
         }
-         
-        
-        htmlToInsert.push('<div class="entry clickable' + 
-                          (firstInGroup?' first"':'"') + unselectable + '>');
-        htmlToInsert.push(leftBtnHtml);                  
-        htmlToInsert.push('<div class="info list"' + unselectable + '>');
-        
-        htmlToInsert.push('<h4' + unselectable + '><em' + unselectable + '>' + e.title + '</em></h4>');
-        if(e.authors) {
-            htmlToInsert.push('<p' + unselectable + '>' + e.authors + 
-                (e.publication? '. ' + e.publication : '') + '</p>');
-        }
-        var k = e.tags.length;
-        if(k > 0) {
-            htmlToInsert.push('<p' + unselectable + '>');
-            for(var j = 0; j < k; ++j) {
-                htmlToInsert.push('<span class="tag"' + unselectable + '>' + e.tags[j] + '</span>');
-            }
-            htmlToInsert.push('</p>');
-        }
-        htmlToInsert.push('</div>');
-        htmlToInsert.push(rightBtnHtml);
-        htmlToInsert.push('</div>'); 
+        htmlToInsert.push(this.entryToHtml(e, firstInGroup));
     }
     return htmlToInsert.join('');
 }
@@ -1299,8 +1302,32 @@ FmUploader.prototype.init = function() {
             that.state.uploading = false;
             var fileName = file.name;
 
+            var entry = {   
+                docId: "890809234",
+                title: "Accelerating SQL Database Operations on a GPU with CUDA", 
+                authors: "Peter Bakkum, Kevin Skadron", 
+                publication: "GPGPU-3", 
+                addedOn: "Apr 5 2012",
+                tags: [] 
+            };
+            that.manager.webService.uploaded_entries.push(entry);
+
+
             $progressEntry.delay(1000).slideToggle(400, function() {
                 $progressEntry.remove();
+
+                var $newEntry = $(that.manager.mainPanel.resultHtmlBuilder.entryToHtml(entry, false));
+                var $result =  that.manager.mainPanel.elements.$result;
+                var $insertPos = $($result.children()[2]);
+                var $highlight = $('<div style="position:absolute;top:0px;left:0px;z-index:-1;background: url(/assets/bg-tile-blue.png) repeat center top;height:100%;width:100%;"></div>');
+                $newEntry.append($highlight);
+                $newEntry.hide();
+                $newEntry.insertAfter($insertPos);
+                that.manager.mainPanel.resize();
+                $newEntry.slideToggle(function() {
+                    $highlight.fadeOut();
+                    that.manager.mainPanel.resize();
+                });
             });
         }
     });
