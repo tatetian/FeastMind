@@ -243,6 +243,14 @@ li.slide.secondary {
     font-style: normal;
     background: url(/assets/time-w.png) no-repeat left center;
 }
+.tag.myshare {
+    font-style: normal;
+    background: url(/assets/heart-w.png) no-repeat 1px center;
+}
+.tag.friends {
+    font-style: normal;
+    background: url(/assets/group-w.png) no-repeat left center;
+}
 em {
     font-family: ClarendonFSBold,Georgia,sans-serif;
     font-weight: bold;
@@ -876,25 +884,13 @@ div.paper-cover > img {
 .upload-icon {
     background: url(/assets/upload.png) no-repeat center center;
 }
-
 .heart-icon{ 
-background: url(/assets/29-heart.png) no-repeat 0.15em center;
-font-family: Helvetica,Arial;
-    font-style: italic;
-    text-indent: 1.45em;
-	
+    background: url(/assets/heart-w.png) no-repeat 0.15em center;
 }
 .group-icon{ 
-
-background: url(/assets/112-group@2x.png) no-repeat 0.15em center;
-font-family: Helvetica,Arial;
-    font-style: italic;
-    text-indent: 1.45em;
-
-	
+    background: url(/assets/group-w.png) no-repeat 0.15em center;
 }
-
-.friends-info{
+.friends-i-w{
 	left:0px;
 	top:0px;
 	position:relative;
