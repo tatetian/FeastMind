@@ -430,6 +430,9 @@ function FmMainPanel(manager) {
     var scrollContainer = $(this.elements.secondaryView).get(0);
     var scrollContent = $(this.elements.secondaryView + ' > .wrapper').get(0);
     this.scroller2 = new FmScroller(scrollContainer, scrollContent, body);
+    $(this.elements.me).delegate('a.fav', "fmClick", function() {
+        alert("WOW");
+    })
 }
 FmMainPanel.prototype.init = function() {
     // init variables 
@@ -659,8 +662,10 @@ FmScroller.prototype.initEventHandler = function() {
 				return;
 			}
 
-            if(!moved)
+            if(!moved){
                 $(e.target).closest('.clickable').trigger('fmClick');
+                //alert(e.target);
+            }
             if($clicked.length > 0) {
                 setTimeout(function() {
                     for(i in $clicked)
@@ -1206,6 +1211,7 @@ FmResultHtmlBuilder.prototype.entryToHtml = function(e, firstInGroup) {
 FmResultHtmlBuilder.prototype.toHtml = function(entries) {
     // According to www.learningjquery.com/2009/03/43439-reasons-to-use-append-correct
     // below is the fastest way to insert many HTML elements into DOM
+    //var leftBtnHtml = '<ul class="buttons2"><li class="button fav"></li></ul>';
     var htmlToInsert = [];
     var l = entries.length;
     var unselectable = " unselectable=on";
@@ -1213,7 +1219,7 @@ FmResultHtmlBuilder.prototype.toHtml = function(entries) {
         var e = entries[i];
         var group = this.decideTimeGroup(e);
         var firstInGroup = false;
-        if(group != this.lastGroup) {
+       if(group != this.lastGroup) {
             htmlToInsert.push('<div class="title"' + unselectable + '><h5>' + 
                                 group + '<span class="nip"></span></h5></div>');
             firstInGroup = true;
