@@ -732,6 +732,24 @@ body > #main div.title > h5 > span.nip {
     width: 100%;
     height: 100%;
 }
+.result .entry .buttons2{
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    /*margin: -1.5em 0 0 0;*/
+    height: 30%;
+    width: 1.5em;
+    /*display: none;*/
+    z-index: 50;
+/*    border-top-right-radius: 1em 1em;
+    border-bottom-right-radius: 1em 1em;*/
+    cursor: pointer;
+}
+.result .entry .buttons2 .button {
+    width: 100%;
+    height: 100%;
+}
+
 .result .entry p{
     color: #B1AEAE;
 }
@@ -864,6 +882,9 @@ div.paper-cover > img {
 .arrow-right-icon {
     background: url(/assets/arrow-right-d-tiny.png) no-repeat center center;
 }
+.fav {
+    background: url(/assets/29-heart.png) no-repeat center center;
+}
 .clicked .arrow-right-icon {
     background: url(/assets/arrow-right-w-tiny.png) no-repeat center center;
 }
@@ -939,4 +960,15 @@ font-family: Helvetica,Arial;
 	
 .entry .percent {
   float: right;
+}
+
+a.down {
+    background: #bbb;
+    border-top: solid 2px #777;
+    border-left: solid 2px #777;
+    border-bottom:solid 2px  #eaeaea;
+    border-right: solid 2px #eaeaea;
+    }
+.list{
+    margin-left:2em;
 }
