@@ -664,7 +664,7 @@ FmScroller.prototype.initEventHandler = function() {
 
             if(!moved){
                 $(e.target).closest('.clickable').trigger('fmClick');
-                alert(e.target);
+                //alert(e.target);
             }
             if($clicked.length > 0) {
                 setTimeout(function() {
