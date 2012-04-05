@@ -702,13 +702,13 @@ body > #main div.title > h5 > span.nip {
 }
 .result .entry {    
     line-height: 1.1;
-    border-top: 1px dotted #B1AEAE;
+    border-bottom: 1px dotted #B1AEAE;
     /*min-height: 6em;*/
     padding: 0.8em 0.125em;
     position: relative;
 }
-.result .entry.first {
-    border-top: none;
+.result .entry.last {
+    border-bottom: none;
 }
 .result .entry:last-child {
     border-bottom: 2px solid #B1AEAE;
@@ -719,6 +719,9 @@ body > #main div.title > h5 > span.nip {
 }
 .result .entry:not(.progress) .info {
     margin-right: 3em;
+}
+.result .entry.progress {
+    border-top: 1px dotted #B1AEAE;
 }
 .result .entry .buttons {
     position: absolute;
