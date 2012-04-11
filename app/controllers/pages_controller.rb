@@ -6,7 +6,6 @@ class PagesController < ApplicationController
   def login
   end
   def validate_login
-    sleep 1.5
     redirect_to "/manager"
   end
   def upload
