@@ -100,9 +100,48 @@ h3 {
     line-height: 1.2;
 }
 #signup {
-    padding: 15px 0;
+    padding: 8px 0;
     width: 580px;
 }
+#signup #signup-wrapper{
+	margin:0 auto;
+	width:100%;
+	display:none;
+	
+}
+#signup-button a{
+color:#6EB3D1;
+font-size:18px;
+cursor:pointer;
+}
+
+#signup-wrapper input{
+	color:rgb(150,150,150);
+	-webkit-border-radius:0.3em;
+	height:1.5em;
+	border:1px solid #fff;
+	padding-left:6px;
+}
+#signup-wrapper span{
+	margin-left:10px;
+	height:2em;
+}
+#signup-wrapper .submitbutton{
+	background-color: #6EB3D1; color:#fff;   border-color:#6EB3D1;
+	font-size:1em;
+	cursor:pointer;
+	}
+ 
+#signup-wrapper p{
+margin-top:5px;
+	line-height:2em;
+	height:2em;
+}
+#signup-wrapper input{
+	width:110px;
+
+}	
+	
 .login{
 	position:absolute;
     left:50%;
@@ -151,17 +190,21 @@ h3 {
     color: black;
     font-family: Helvetica,Arial;
 	font-size:14px;
+	border:0px solid #fff;
+	text-indent:5px;
 }
 .login .remember a{
+
 	color:#09C;
 	text-decoration:underline;
 }
 .btn-login-submit{
-    margin-left:10px;
+    margin-left:8px;
     background: url(/assets/btn_login_submit.png) no-repeat center;
     width:73px;
     height:31px;
     cursor:pointer;
+    border:0px solid #fff;
 }
 .login-right{
     position: relative;
