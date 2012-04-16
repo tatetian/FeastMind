@@ -25,11 +25,11 @@
 			<%= form_tag("/users", :method => "post") do %>
 
       <p>
-      <span><%= text_field_tag "user[name]","Username"%></span>
+      <span><%= text_field_tag "user[name]","", :placeholder => "Name"%></span>
 
-      <span><%= text_field_tag "user[email]","Email"%></span>
+      <span><%= text_field_tag "user[email]", "", :placeholder => "Email"%></span>
 
-      <span><%= password_field_tag "user[password]","password"%></span>
+      <span><%= password_field_tag "user[password]","", :placeholder => "Password" %></span>
       
       <span><%= submit_tag "SIGN UP", class: "submitbutton btn btn-large btn-primary" %>
 			</span>
