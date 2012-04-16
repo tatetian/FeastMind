@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include SessionsHelper
   def new
   @user = User.new
   end
@@ -11,6 +12,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     @user.password_confirmation = @user.password
     if @user.save
+      sign_in @user
       flash[:success] = "Welcome to the Sample App!"
       redirect_to "/manager"
     else

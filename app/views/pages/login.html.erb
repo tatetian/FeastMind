@@ -1,15 +1,15 @@
 <div class="container">
   <div class="wrapper">
     <div class="login ">
-      <%= form_tag("/validate_login", :method => "post") do %>
+       <%= form_tag("/sessions", :method => "post") do %>
         <h1>Login</h1>
         <p class="username">
-          <%= label_tag(:username, "Username:") %><br />
-          <%= text_field_tag(:username, "tatetian") %>
+          <%= label_tag(:username, "Email:") %><br />
+          <%= text_field_tag("session[email]", "" ,:placeholder => "Email") %>
         </p>
         <p class="password ">
           <%= label_tag(:password, "Password:") %><br />
-          <%= password_field_tag(:password, "asdf1234") %>
+          <%= password_field_tag("session[password]", "", :placeholder => "Password") %>
 		</p>
       	<p class="remember">
           <span><%= check_box_tag(:remember_me, "remember", true) %> <a>Remember me</a> </span>
