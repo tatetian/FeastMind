@@ -5,7 +5,11 @@ gem 'rails', '3.2.2'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'mysql'
+gem 'annotate'
+gem 'rspec-rails'
+gem 'bootstrap-sass'
+gem 'bcrypt-ruby'
 
 gem 'json'
 

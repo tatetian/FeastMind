@@ -1,4 +1,10 @@
 FeastMind::Application.routes.draw do
+  get "users/new"
+
+  get "users/show"
+  
+  resources :users
+
   match 'reader' => 'reader#index'
 
   match 'manager' => 'manager#index' 
