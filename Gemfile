@@ -10,6 +10,7 @@ gem 'annotate'
 gem 'rspec-rails'
 gem 'bootstrap-sass'
 gem 'bcrypt-ruby'
+gem 'jquery-rails'
 
 gem 'json'
 
