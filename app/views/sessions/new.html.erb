@@ -1,6 +1,8 @@
 <% provide(:title, "Sign in") %>
 <h1>Sign in</h1>
-
+  <% flash.each do |key, value| %>
+    <div class="alert alert-<%= key %>"><%= value %></div>
+  <% end %>
 <form accept-charset="UTF-8" action="/sessions" method="post">
   <div>
     <label for="session_email">Email</label>

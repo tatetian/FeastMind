@@ -31,6 +31,8 @@
 
       <span><%= password_field_tag "user[password]","", :placeholder => "Password" %></span>
       
+      <span><%= hidden_field_tag "user[password_confirmation]" %></span>
+      
       <span><%= submit_tag "SIGN UP", class: "submitbutton btn btn-large btn-primary" %>
 			</span>
 			</p>

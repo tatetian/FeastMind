@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
       redirect_to "/manager"
     else
       flash.now[:error] = 'Invalid email/password combination'
-      render 'new'
+      redirect_to '/login', :flash => flash
     end
   end
 
