@@ -1,40 +1,60 @@
 <div class="container">
   <div class="wrapper">
-    <div class="login ">
-       <%= form_tag("/sessions", :method => "post") do %>
-        <h1>Login</h1>
-        <p class="username">
-          <%= label_tag(:username, "Email:") %><br />
-          <%= text_field_tag("session[email]", "" ,:placeholder => "Email") %>
-        </p>
-        <p class="password ">
-          <%= label_tag(:password, "Password:") %><br />
-          <%= password_field_tag("session[password]", "", :placeholder => "Password") %>
-		</p>
-      	<p class="remember">
-          <span><%= check_box_tag(:remember_me, "remember", true) %> <a>Remember me</a> </span>
-          <%= submit_tag("", :class => "btn-login-submit") %>
-        </p>
-      <% end %>
-<!--	  <form action="/manager" method=>
-        <h1>Login</h1>
-            <p class="username">
-              <label>Username: </label><br />
-              <input name="username" value="tatetian"/> 
-            </p>
-            <p class="password ">
-              <label>Password: </label><br />
-			  <input type="password" name="password" value="asdf1234" >	
-			</p>
-			<p class="remember">
-				<span><input type="checkbox" value="" checked /><a>Remember me</a></span>
-				<input type="submit" value="" class="btn-login-submit" />
-			</p>
-          </form>-->
-      <div class="login-right ">
-        
-        <p><img src="/assets/renren2.png "  height="30px"	/></p>
+        <div class="login ">
+          
+            <div class="login-form-wrapper">
+            <%= form_tag("/sessions", :method => "post") do %>
+              <p style="margin-left:10px; float:left;">
+                <span>
+                  <%= text_field_tag("session[email]", "" ,:placeholder => "Email",:class=>"field") %>
+                </span><br />
+                <span style="float:left; color:rgba(255,255,255,0.7); font-size:14px;">
+                  <%= check_box_tag(:remember_me, "remember", true,:style=>"height:16px; width:16px; margin-top:15px;") %>
+                  Remember Me
+                </span><br />
+              </p>
+
+              <p style="margin-left:20px; float:left;">
+                <span >
+                  <%= password_field_tag("session[password]", "", :placeholder => "Password",:class=>"field") %>
+                </span><br />
+                  <%= submit_tag("LOG  IN", :class => "login-button") %>
+              </p>
+            <% end %>
+
+            <span class="login-tip" >
+              <span ><a>Forgot Password?</a>
+              </span> <em > &nbsp;or</em> 
+              <span><a id="register">Not Register?</a>
+              </span>
+            </span>
+                 
+            </div>	
+       </div>
+
+      <div class="signup">
+          <h1>Sign Up</h1>
+          <div class="signup-form-wrapper">
+              <%= form_tag("/users", :method => "post") do %>
+                  <p><label>UserName</label> <br />
+                  <%= text_field_tag "user[name]","", :placeholder => "Name",:class=>"field"%>
+                  <span class="signup-valid">please write your username</span>
+                  </p>
+                  <p><label  >Email</label> <br />
+                  <%= text_field_tag "user[email]", "", :placeholder => "Email",:class=>"field"%>
+                  <span class="signup-valid">please write your username</span>
+                  </p>
+                  <p><label  >Password</label> <br />
+                  <%= password_field_tag "user[password]","", :placeholder => "Password",:class=>"field" %>
+                  <span class="signup-valid">please write your username</span>
+                  </p>
+                  <p><label  >Confirmation</label> <br />
+                  <%= password_field_tag "user[password_confirmation]", "", :placeholder => "Confirm Password",:class=>"field"%><span class="signup-valid">please write your username</span>
+                  </p>
+                    <%= submit_tag "Submit", class: "signup-button" %>
+              <% end %>
+          </div>
       </div>
-	</div>
+
   </div>
 </div>
