@@ -16,11 +16,35 @@
             Read, manage and share<br/>
             all your papers <br/>anywhere, anytime
         </h2>
-        <a href="/signup">
-            <h3 id="signup" class="shadow-box">
-                <span class="blue">Sign up for free</span>
-            </h3>
-        </a>
+        
+            <div id="signup" class="shadow-box">
+			<span id="signup-button" ><a>Sign Up Free</a></span>
+			
+            
+			<div id="signup-wrapper">
+			<%= form_tag("/users", :method => "post") do %>
+
+      <p>
+      <span><%= text_field_tag "user[name]","", :placeholder => "Name"%></span>
+
+      <span><%= text_field_tag "user[email]", "", :placeholder => "Email"%></span>
+
+      <span><%= password_field_tag "user[password]","", :placeholder => "Password" %></span>
+      
+      <span><%= hidden_field_tag "user[password_confirmation]" %></span>
+      
+      <span><%= submit_tag "SIGN UP", class: "submitbutton btn btn-large btn-primary" %>
+			</span>
+			</p>
+			<% end %>
+			<!--<form action=" " method="post">
+			<p><span><input id="user_name" name="user[name]" value="Username" type="text" /> </span>
+			<span><input id="user_email" name="user[email]" value="password" type="password" /> </span><span><input id="user_password" name="user[password]" style=" width:120px; " value="Email" type="text" /></span><span  ><input name="commit" class="submitbutton"  value="SIGN UP" type="submit" /></span></p>
+			</form>-->
+			</div>
+			</div>
+                
+        
         <div class="nip-large"></div>
     </div>
 </div>

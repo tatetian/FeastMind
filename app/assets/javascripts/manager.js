@@ -241,6 +241,14 @@ FmTopPanel.prototype.init = function() {
         }
         else if(tag=='Recent'){
         }
+        else if(tag=='Logout') {
+            $.ajax("/signout", {
+                type: "delete",
+                success: function() {
+                    location.href = "/";
+                }
+            });
+        }
         else
           that.manager.search(tag, null);
     });
