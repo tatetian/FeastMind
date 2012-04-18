@@ -1,4 +1,14 @@
 FeastMind::Application.routes.draw do
+  get "users/new"
+
+  get "users/show"
+  
+  resources :users
+  
+  resources :sessions, only: [:new, :create, :destroy]
+  
+  match '/signout', to: 'sessions#destroy', via: :delete
+
   match 'reader' => 'reader#index'
 
   match 'manager' => 'manager#index' 

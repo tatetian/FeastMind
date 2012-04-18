@@ -22,11 +22,25 @@
 			
             
 			<div id="signup-wrapper">
-			<form action=" " method="post">
-			<p><span><input value="Username" type="text" /> </span>
-			<span><input value="password" type="password" /> </span><span><input style=" width:120px; " value="Email" type="text" /></span><span  ><input class="submitbutton"  value="SIGN UP" type="submit" /></span></p>
-			
-			</form>
+			<%= form_tag("/users", :method => "post") do %>
+
+      <p>
+      <span><%= text_field_tag "user[name]","", :placeholder => "Name"%></span>
+
+      <span><%= text_field_tag "user[email]", "", :placeholder => "Email"%></span>
+
+      <span><%= password_field_tag "user[password]","", :placeholder => "Password" %></span>
+      
+      <span><%= hidden_field_tag "user[password_confirmation]" %></span>
+      
+      <span><%= submit_tag "SIGN UP", class: "submitbutton btn btn-large btn-primary" %>
+			</span>
+			</p>
+			<% end %>
+			<!--<form action=" " method="post">
+			<p><span><input id="user_name" name="user[name]" value="Username" type="text" /> </span>
+			<span><input id="user_email" name="user[email]" value="password" type="password" /> </span><span><input id="user_password" name="user[password]" style=" width:120px; " value="Email" type="text" /></span><span  ><input name="commit" class="submitbutton"  value="SIGN UP" type="submit" /></span></p>
+			</form>-->
 			</div>
 			</div>
                 
