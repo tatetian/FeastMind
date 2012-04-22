@@ -38,22 +38,29 @@
           <h1>Sign Up</h1>
           <div class="signup-form-wrapper">
               <%= form_tag("/users", :method => "post") do %>
-                  <p><label>UserName</label> <br />
-                  <%= text_field_tag "user[name]","", :placeholder => "Name",:class=>"field"%>
-                  <span class="signup-valid">please write your username</span>
+                  <p class="">
+                  <%= text_field_tag "user[email]","", :placeholder => "Email",:class=>"field field-email"%>
+                  
                   </p>
-                  <p><label  >Email</label> <br />
-                  <%= text_field_tag "user[email]", "", :placeholder => "Email",:class=>"field"%>
-                  <span class="signup-valid">please write your username</span>
+                    <p  class=" ">
+                  <%= text_field_tag "user[name]", "", :placeholder => "Name",:class=>"field field-name"%>
+                  
                   </p>
-                  <p><label  >Password</label> <br />
-                  <%= password_field_tag "user[password]","", :placeholder => "Password",:class=>"field" %>
-                  <span class="signup-valid">please write your username</span>
+                  <p class=" ">
+                  <%= password_field_tag "user[password]","", :placeholder => "Password",:class=>"field field-password" %>
+                 
                   </p>
-                  <p><label  >Confirmation</label> <br />
-                  <%= password_field_tag "user[password_confirmation]", "", :placeholder => "Confirm Password",:class=>"field"%><span class="signup-valid">please write your username</span>
+                  <p class=" ">
+                  <%= password_field_tag "user[password_confirmation]", "", :placeholder => "Password Confirmation",:class=>"field field-password "%>
                   </p>
+                  <div class="erron-alert"> 
+                    <ul>
+                     <li >1/the email had been used!</li>
+                     <li>2/please keep the password the same!
+                    </li>
+                    </ul></div>
                     <%= submit_tag "Submit", class: "signup-button" %>
+                
               <% end %>
           </div>
       </div>

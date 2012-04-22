@@ -3,6 +3,10 @@ $(document).ready(function() {
 	
 
     var minH = 600;
+    $(".signup .field-email").focus(function (){
+    this.css("background","#fff url(/assets/bg-email2.png) no-repeat 5px center").css("border","1px solid red");});
+    $(".signup .field-name").focus(function (){
+    this.css("background","#fff url(/assets/bg-name2.png) no-repeat 5px center").css("outline","1px solid red");});
 	
     function resize() {
         var H = $(window).height();

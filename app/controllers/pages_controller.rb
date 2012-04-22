@@ -36,6 +36,9 @@ class PagesController < ApplicationController
       format.html { head :no_content }
       format.json { render :json => doc_meta }
     end
+    # database
+    # Docs.save id, title, author, date
+    # UserDoc doc_id, user_id
   end
 
   private 
