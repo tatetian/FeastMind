@@ -1253,7 +1253,7 @@ function FmUploader(manager) {
         browse_button : this.elements.uploadBtn,
         drop_element: 'main',
         max_file_size : '10mb',
-        url : 'upload.json',
+        url : '/docs.json',
         flash_swf_url : 'plupload/plupload.flash.swf',
         filters : [
             {title : "PDF files", extensions : "pdf"}
@@ -1305,21 +1305,25 @@ FmUploader.prototype.init = function() {
         console.log('queuechanged');
     });
 
-    this.uploader.bind('FileUploaded', function(up, file) {
+    this.uploader.bind('FileUploaded', function(up, file, response) {
         if (that.state.uploading == file.id) {
             that.state.uploading = false;
             var fileName = file.name;
 
-            var entry = {   
+            /*var entry = {   
                 docId: "890809234",
                 title: "Accelerating SQL Database Operations on a GPU with CUDA", 
                 authors: "Peter Bakkum, Kevin Skadron", 
                 publication: "GPGPU-3", 
                 addedOn: "Apr 5 2012",
                 tags: [] 
-            };
+            };*/
+//            console.debug(response);
+            var entry = $.parseJSON(response.response);
+            var now = new Date().toString("MMMM yyyy");
+            entry.addedOn = now;
+            entry.tags = [];
             that.manager.webService.uploaded_entries.push(entry);
-
 
             $progressEntry.delay(1000).slideToggle(400, function() {
                 $progressEntry.remove();

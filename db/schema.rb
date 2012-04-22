@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120416132248) do
+ActiveRecord::Schema.define(:version => 20120422130505) do
+
+  create_table "docs", :force => true do |t|
+    t.string   "docid"
+    t.string   "title"
+    t.string   "author"
+    t.date     "date"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "content"
+    t.integer  "convert"
+  end
+
+  add_index "docs", ["docid"], :name => "index_docs_on_docid", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "name"

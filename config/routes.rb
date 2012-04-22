@@ -4,6 +4,7 @@ FeastMind::Application.routes.draw do
   get "users/show"
   
   resources :users
+  resources :docs
   
   resources :sessions, only: [:new, :create, :destroy]
   
