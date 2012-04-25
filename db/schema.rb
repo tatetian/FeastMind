@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120422130505) do
+ActiveRecord::Schema.define(:version => 20120425084714) do
+
+  create_table "collections", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "doc_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "collections", ["doc_id"], :name => "index_collections_on_doc_id"
+  add_index "collections", ["user_id", "doc_id"], :name => "index_collections_on_user_id_and_doc_id", :unique => true
+  add_index "collections", ["user_id"], :name => "index_collections_on_user_id"
 
   create_table "docs", :force => true do |t|
     t.string   "docid"

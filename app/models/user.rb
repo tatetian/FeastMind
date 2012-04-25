@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
    attr_accessible :name, :email, :password, :password_confirmation
   has_secure_password
+  has_many :collections, foreign_key: "user_id", dependent: :destroy
+  has_many :docs, through: :collections
+  
   before_save :create_remember_token
 
   validates :name, presence: true, length: { maximum: 50 }
@@ -10,7 +13,18 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true
-   def create_remember_token
-      self.remember_token = SecureRandom.urlsafe_base64
-    end
+  def create_remember_token
+    self.remember_token = SecureRandom.urlsafe_base64
+  end
+  def following?(doc)
+    self.collections.find_by_doc_id(doc.id)
+  end
+
+  def follow!(doc)
+    self.collections.create!(doc_id: doc.id)
+  end
+
+  def unfollow!(doc)
+    self.collections.find_by_doc_id(doc.id).destroy
+  end
 end

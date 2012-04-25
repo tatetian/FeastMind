@@ -26,7 +26,7 @@ class DocsController < ApplicationController
         parsed_meta["id"] = hash
         doc_meta = ActiveSupport::JSON.encode parsed_meta 
         #json_response = {:file_name => uploaded_io.original_filena
-        @doc = Docs.new(docid: hash,title: parsed_meta["title"],author: parsed_meta["authors"],date: Date.parse(parsed_meta["date"]),content: doc_text,convert: 0)
+        @doc = Doc.new(docid: hash,title: parsed_meta["title"],author: parsed_meta["authors"],date: Date.parse(parsed_meta["date"]),content: doc_text,convert: 0)
         if @doc.save
             flash[:success] = "Upload Success!"
             respond_to do |format| 
