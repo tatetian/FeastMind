@@ -45,15 +45,23 @@ class DocsController < ApplicationController
         doc_meta = %x[app/tools/json2meta #{tmp_text_file}]
         # add doc id
         parsed_meta = ActiveSupport::JSON.decode doc_meta
-        parsed_meta["id"] = hash
-        doc_meta = ActiveSupport::JSON.encode parsed_meta 
         #json_response = {:file_name => uploaded_io.original_filena
-        @doc = Doc.new(docid: hash,title: parsed_meta["title"],author: parsed_meta["authors"],date: Date.parse(parsed_meta["date"]),content: doc_text,convert: 0)
+        @doc = Doc.new(docid: hash,title: parsed_meta["title"],author: parsed_meta["authors"].join(", "),date: Date.parse(parsed_meta["date"]),content: doc_text,convert: 0)
         if @doc.save
             flash[:success] = "Upload Success!"
             respond_to do |format| 
                 format.html { head :no_content }
-                format.json { render :json => doc_meta }
+                format.json { 
+                    response = { 
+                        :id     => @doc.id, 
+                        :title  => @doc.title, 
+                        :author => @doc.author, 
+                        :date   => @doc.date,
+                        :created_at => @doc.created_at
+                    }
+                    json = ActiveSupport::JSON.encode response
+                    render :json => json
+                }
             end
             # save PDF
             final_dir = Rails.root.join 'public','uploads',hash

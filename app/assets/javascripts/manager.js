@@ -1243,9 +1243,8 @@ FmUploader.prototype.init = function() {
 //            console.debug(response);
             var entry = $.parseJSON(response.response);
             var now = new Date().toString("MMMM yyyy");
-            entry.addedOn = now;
+            entry.created_at = now;
             entry.tags = [];
-            that.manager.webService.uploaded_entries.push(entry);
 
             $progressEntry.delay(1000).slideToggle(400, function() {
                 $progressEntry.remove();
