@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :collections, foreign_key: "user_id", dependent: :destroy
   has_many :docs, through: :collections
+  has_many :tags, dependent: :destroy
   
   before_save :create_remember_token
 
