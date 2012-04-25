@@ -1,4 +1,21 @@
 class DocsController < ApplicationController
+    def index
+        user = current_user
+        selected_docs =  user.docs.order("docs.created_at DESC").limit(params[:limit]).offset(params[:start]).select("docs.id,title,author,date,docs.created_at")
+        total = user.docs.count
+        response = {
+            :error => nil, 
+            :result => {
+                :entries => selected_docs, 
+                :total => total
+            } 
+        }
+        json = ActiveSupport::JSON.encode response
+        respond_to do |format| 
+            format.html { head :no_content }
+            format.json { render :json => json }
+        end            
+    end    
     def create
         # save file
         uploaded_io = params[:file]
@@ -36,6 +53,9 @@ class DocsController < ApplicationController
             # save PDF
             final_dir = Rails.root.join 'public','uploads',hash
             FileUtils.mv(tmp_dir, final_dir)
+            # add collection            
+            user = current_user
+            user.collect! @doc
         else
             respond_to do |format| 
                 format.html { head :no_content }

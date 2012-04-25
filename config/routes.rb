@@ -7,7 +7,7 @@ FeastMind::Application.routes.draw do
   resources :docs
   
   resources :sessions, only: [:new, :create, :destroy]
-  
+
   match '/signout', to: 'sessions#destroy', via: :delete
 
   match 'reader' => 'reader#index'

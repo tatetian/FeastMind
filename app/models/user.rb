@@ -16,15 +16,15 @@ class User < ActiveRecord::Base
   def create_remember_token
     self.remember_token = SecureRandom.urlsafe_base64
   end
-  def following?(doc)
+  def collect?(doc)
     self.collections.find_by_doc_id(doc.id)
   end
 
-  def follow!(doc)
+  def collect!(doc)
     self.collections.create!(doc_id: doc.id)
   end
 
-  def unfollow!(doc)
+  def uncollect!(doc)
     self.collections.find_by_doc_id(doc.id).destroy
   end
 end
