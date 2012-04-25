@@ -1,8 +1,13 @@
 class DocsController < ApplicationController
     def index
         user = current_user
-        selected_docs =  user.docs.order("docs.created_at DESC").limit(params[:limit]).offset(params[:start]).select("docs.id,title,author,date,docs.created_at")
-        total = user.docs.count
+        selected_docs =  user.docs.order("docs.created_at DESC")
+                                  .limit(params[:limit]).offset(params[:start])
+                                  .where("title LIKE '%#{params[:keywords]}%' OR "+
+                                         "author LIKE '%#{params[:keywords]}%'")
+                                  .select("docs.id,title,author,date,docs.created_at")
+        total = user.docs.where("title LIKE '%#{params[:keywords]}%' OR "+
+                                 "author LIKE '%#{params[:keywords]}%'").count
         response = {
             :error => nil, 
             :result => {
