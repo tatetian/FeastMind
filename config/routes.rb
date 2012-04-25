@@ -1,10 +1,17 @@
 FeastMind::Application.routes.draw do
+  get "tags/index"
+
+  get "tags/create"
+
+  get "tags/destroy"
+
   get "users/new"
 
   get "users/show"
   
   resources :users
   resources :docs
+  resources :tags
   
   resources :sessions, only: [:new, :create, :destroy]
 

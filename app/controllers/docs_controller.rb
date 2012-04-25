@@ -6,6 +6,14 @@ class DocsController < ApplicationController
                                   .where("title LIKE '%#{params[:keywords]}%' OR "+
                                          "author LIKE '%#{params[:keywords]}%'")
                                   .select("docs.id,title,author,date,docs.created_at")
+        #selected_docs.first.collections.find_by_user_id(user.id).tags  
+        selected_docs = selected_docs.map do |sd|
+            tags = sd.collections.find_by_user_id(user.id).tags.map {|t| t.name}
+            json = ActiveSupport::JSON.encode sd
+            sd = ActiveSupport::JSON.decode json
+            sd["tags"] = tags
+            sd
+        end
         total = user.docs.where("title LIKE '%#{params[:keywords]}%' OR "+
                                  "author LIKE '%#{params[:keywords]}%'").count
         response = {

@@ -15,6 +15,7 @@ class Collection < ActiveRecord::Base
   def tag!(tag)
     if(self.user_id == tag.user_id)
         self.tagged_collections.create!(tag_id: tag.id)
+    end
   end
 
   def untag!(tag)

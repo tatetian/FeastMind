@@ -216,8 +216,15 @@ FmTopPanel.prototype.init = function() {
               });
             }
         }
-    });  
-    this.showTags(this.tags);
+    });
+    $.get(
+          "/tags",
+          {},
+          function(response,status,xhr){
+              that.showTags(response.tags);
+          },
+          "json"
+     );  
     this.updateHeight();
     // click entry event
     var additionalClass = {
@@ -285,11 +292,28 @@ FmTopPanel.prototype.init = function() {
         $(".tags .entries").append('<li class="entry clickable" id="newtag"><h3 class="tag"><input type="text" class="addtag" autocomplete="off"/></h3><h3 class="num">0</h3></li>');   
         $(".addtag").focus();
         $(".addtag").blur(function(){
-            if($(".addtag").val()!=""){
+            var name = $(".addtag").val();
+            if(name!=""){
                   //alert($(".addtag").val());
-                  that.tags.push({name: $(".addtag").val(),num: 0});
-                  $("#newtag").removeAttr("id")
-                  $(".addtag").replaceWith($(".addtag").val());
+                  $.post(
+                      "/tags",
+                      {
+                        name: name
+                      },
+                      function(response,status,xhr){
+                          if(!response.error){
+                                $("#newtag").removeAttr("id")
+                                $(".addtag").replaceWith(name);
+                          }
+                          else{
+                                $("#newtag").remove();
+                          }
+                      },
+                      "json"
+                 );
+                  //that.tags.push({name: $(".addtag").val(),num: 0});
+                  //$("#newtag").removeAttr("id")
+                  //$(".addtag").replaceWith($(".addtag").val());
             }
             else{
                 $("#newtag").remove();
@@ -846,6 +870,7 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
             start: start,
             limit: limit,
             keywords: keywords||""
+            tag: tag||"All"
           },
           function(response,status,xhr){
               callback(response);
