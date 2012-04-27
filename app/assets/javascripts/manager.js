@@ -869,7 +869,7 @@ FmWebService.prototype.docsSearch = function(tag, keywords, start, limit, callba
           {
             start: start,
             limit: limit,
-            keywords: keywords||""
+            keywords: keywords||"",
             tag: tag||"All"
           },
           function(response,status,xhr){
