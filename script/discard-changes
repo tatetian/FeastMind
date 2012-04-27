@@ -1,0 +1,5 @@
+#!/bin/sh
+# Restore unstaged files
+git checkout -- .
+# Remove new, unstaged files
+git clean -df
