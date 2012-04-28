@@ -1,27 +1,9 @@
 class DocsController < ApplicationController
     def index
-        user = current_user
-        selected_docs =  user.docs.order("docs.created_at DESC")
-                                  .limit(params[:limit]).offset(params[:start])
-                                  .where("title LIKE '%#{params[:keywords]}%' OR "+
-                                         "author LIKE '%#{params[:keywords]}%'")
-                                  .select("docs.id,title,author,date,docs.created_at")
-        #selected_docs.first.collections.find_by_user_id(user.id).tags  
-        selected_docs = selected_docs.map do |sd|
-            tags = sd.collections.find_by_user_id(user.id).tags.map {|t| t.name}
-            json = ActiveSupport::JSON.encode sd
-            sd = ActiveSupport::JSON.decode json
-            sd["tags"] = tags
-            sd
-        end
-        total = user.docs.where("title LIKE '%#{params[:keywords]}%' OR "+
-                                 "author LIKE '%#{params[:keywords]}%'").count
+        result = current_user.search_docs params
         response = {
             :error => nil, 
-            :result => {
-                :entries => selected_docs, 
-                :total => total
-            } 
+            :result => result 
         }
         json = ActiveSupport::JSON.encode response
         respond_to do |format| 

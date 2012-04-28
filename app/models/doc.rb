@@ -7,5 +7,7 @@ class Doc < ActiveRecord::Base
     validates   :convert, presence: true
 
     has_many    :collections, :foreign_key => "doc_id", :dependent => :destroy
-    has_many    :users, through: :collections
+    has_many    :tags, through: :collections
+
+    default_scope :order => 'docs.created_at DESC'
 end

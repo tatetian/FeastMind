@@ -11,18 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120425135828) do
+ActiveRecord::Schema.define(:version => 20120427120043) do
 
   create_table "collections", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "tag_id"
     t.integer  "doc_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
   add_index "collections", ["doc_id"], :name => "index_collections_on_doc_id"
-  add_index "collections", ["user_id", "doc_id"], :name => "index_collections_on_user_id_and_doc_id", :unique => true
-  add_index "collections", ["user_id"], :name => "index_collections_on_user_id"
+  add_index "collections", ["tag_id", "doc_id"], :name => "index_collections_on_user_id_and_doc_id", :unique => true
+  add_index "collections", ["tag_id"], :name => "index_collections_on_user_id"
 
   create_table "docs", :force => true do |t|
     t.string   "docid"
@@ -36,17 +36,6 @@ ActiveRecord::Schema.define(:version => 20120425135828) do
   end
 
   add_index "docs", ["docid"], :name => "index_docs_on_docid", :unique => true
-
-  create_table "tagged_collections", :force => true do |t|
-    t.integer  "tag_id"
-    t.integer  "collection_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
-  add_index "tagged_collections", ["collection_id"], :name => "index_tagged_collections_on_collection_id"
-  add_index "tagged_collections", ["tag_id", "collection_id"], :name => "index_tagged_collections_on_tag_id_and_collection_id", :unique => true
-  add_index "tagged_collections", ["tag_id"], :name => "index_tagged_collections_on_tag_id"
 
   create_table "tags", :force => true do |t|
     t.string   "name"

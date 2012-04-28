@@ -1,13 +1,12 @@
 class Collection < ActiveRecord::Base
-  attr_accessible :doc_id,:user_id
+  attr_accessible :doc_id,:tag_id
 
-  validates   :user_id, presence: true
+  validates   :tag_id, presence: true
   validates   :doc_id, presence: true
 
-  belongs_to  :user
+  belongs_to  :tag
   belongs_to  :doc
-  has_many    :tagged_collections, foreign_key: "collection_id", dependent: :destroy
-  has_many    :tags, through: :tagged_collections
+
 
   def tag?(tag)
     self.tagged_collections.find_by_tag_id(tag.id)

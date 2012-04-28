@@ -662,6 +662,37 @@ body > .loading {
     user-select: text;
     cursor: auto;
 }
+.main .entry .tag-delete{
+  background:url(/assets/tag-delete.png) no-repeat left center ;
+  position:absolute;
+  float:right;
+  top:10px;
+  right:5px;
+  width:22px;
+  height:22px;
+  -webkit-transition: -weblit-transform 1.5s linear;
+  
+}
+.main .entry .tag-delete.clicked{
+
+-webkit-transform:rotate(90deg);
+  
+}
+.main .entry .tag-delete-ok{
+  background:url(/assets/rise-bg-red.png)  ;
+  -webkit-border-radius:8px;
+  padding:0px;
+  padding-bottom:6px;
+  position:absolute;
+  float:right;
+  top:8px;
+  right:38px;
+  width:60px;
+  height:20px;
+  font-size:16px;
+  font-weight:bold;
+  text-align:center;
+}
 #main > .slide > div{
 }
 
@@ -791,8 +822,8 @@ div.paper-cover {
     width: 275px;
     height: 356px;
     background: transparent url(/assets/paper-cover-shadow.png) center bottom;
-    padding: 0 0 8px;
-    margin: 0em auto 1em;
+    padding: 0 0 5px;
+    margin: 0em auto 0em;
 }
 div.paper-cover > img {
     border: 0;
@@ -807,6 +838,25 @@ div.paper-cover > img {
     margin: 1em 0 1.5em;
     line-height: 1.6;
 }
+.entry-details .tag-wrapper {
+   width:100%;
+   margin:0 auto 0.4em;
+   text-align:center;
+}
+.entry-details .detail-tag{
+   display:inline-block;
+   font-size:1em;
+   background:url(/assets/tag-small-light.png) no-repeat 5px center;
+   padding:2px 5px 2px 25px;
+   margin-left:5px;
+   height:20px;
+   line-height:20px;
+   
+   border:1px dashed rgb(150,150,150);
+   -webkit-border-radius:4px;
+   -moz-border-radius:4px;
+}
+
 .entry-details > .wrapper {
     margin: 0 auto;
     padding: 0 0.25em;
