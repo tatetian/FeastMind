@@ -23,7 +23,7 @@ function FmManager() {
     this.limit = 5;
 }
 FmManager.prototype.init = function() {
-    // init components
+    // init componentse
     this.topPanel.init();
     this.mainPanel.init();
     this.uploader.init();
@@ -137,40 +137,7 @@ function FmTopPanel(manager) {
         }
     };
     //tags data
-    this.tags = [
-                {   
-                    name: "column store",
-                    num: 1
-                },
-                {
-                    name: "Computer Vision",
-                    num: 6
-                },
-                {
-                    name: "Human Motion",
-                    num: 2
-                },
-                {
-                    name: "Human Pose",
-                    num: 3
-                },
-                {
-                    name: "Monocular",
-                    num: 1
-                },
-                {
-                    name: "Single-Camera",
-                    num: 1
-                },
-                {
-                    name: "Tracking",
-                    num: 2
-                },
-                {  
-                    name: "VLDB",
-                    num: 0
-                }
-            ];
+    this.tags = [];
     //show tag
     this.tagHtmlBuilder =  new FmTagHtmlBuilder();
     // scroller
@@ -217,14 +184,10 @@ FmTopPanel.prototype.init = function() {
             }
         }
     });
-    $.get(
-          "/tags",
-          {},
-          function(response,status,xhr){
+    that.manager.webService.tagsList(function(response) {
               that.showTags(response.tags);
-          },
-          "json"
-     );  
+              that.tags = response.tags;
+    });
     this.updateHeight();
     // click entry event
     var additionalClass = {
@@ -289,59 +252,68 @@ FmTopPanel.prototype.init = function() {
         }
     });
     that.cached.btns.$editTag.click(function(){
-        var debu= $(".tags .entry .button");
-        debu.toggle();        
-        if(debu.css("display")=="block"){
-            debu.parent().removeClass("clickable");
+        var $debu= $("#top .tags .entry .button");  
+        if($debu.css("opacity")==0){
+            $debu.prev().addClass("clicked" ); 
+            $debu.parent().removeClass("clickable");
+            $debu.addClass("leftmove");
         }
         else{
-            debu.parent().addClass("clickable");            
-            debu.removeClass("clicked");
+            $debu.parent().addClass("clickable");            
+            $debu.removeClass("clicked");            
+            $debu.removeClass("leftmove");            
+            $debu.prev().removeClass("clicked");
         }
-        $(".tags .entry .ok").toggle(false);
+        $("#top .tags .entry .ok").removeClass("leftmove");
     });   
-    that.cached.$me.delegate(".tags .entry .button","click",function(e){
-            var deok = $(this).next();   
-            var temp = deok.css("display");
-            $(".tags .entry .button").removeClass("clicked");            
-            $(".tags .entry .ok").hide();
-            if(temp=="none"){                          
+    that.cached.$me.delegate(".tags .entry .button.leftmove","click",function(e){
+            var $deok = $(this).next();
+            var temp = $deok.css("opacity");
+            $("#top .tags .entry .button").removeClass("clicked");            
+            $("#top .tags .entry .ok").removeClass("leftmove");
+            if(temp==0){     
                 $(this).addClass("clicked");
-                $(deok).fadeIn(300);
-                $(deok).focus();
+                $deok.addClass("leftmove");
+                //$deok.focus();
             }
             else{
                 $(this).removeClass("clicked");
-                $(deok).fadeOut(300);
+                $deok.removeClass("leftmove");
             }
     });
-    that.cached.$me.delegate(".tags .entry .ok","blur",function(e){
-            alert("OK");
-            $(this).next().hide();
+    that.cached.$me.delegate("#top .tags .entry .ok.leftmove.","click",function(e){
+            var $entry = $(this).parent(); 
+            var tagid = $(this).prev().prev().prev()[0].dataset["id"];
+            that.manager.webService.tagDelete(tagid, function(response){  
+                  for(var i = 0; i< that.tags.length ; i++){
+                        if(that.tags[i].id+" "==tagid+" "){
+                              that.tags.splice(i,1);
+                              break;
+                        }
+                  }
+                  $entry.slideToggle(function(){
+                        $(this).remove();
+                  });      
+            });
     });
     that.cached.btns.$addTag.click(function(){
-        $(".tags .entries").append('<li class="entry clickable" id="newtag"><h3 class="tag"><input type="text" class="addtag" autocomplete="off"/></h3><h3 class="num">0</h3></li>');   
+        $("#top .tags .entries").append('<li class="entry taghead clickable" id="newtag"><h3 class="tag"><input type="text" class="addtag" autocomplete="off"/></h3><h3 class="num">0</h3><h3 class="delete button"></h3><h3 class="delete ok">delete</h3></li>');
         $(".addtag").focus();
         $(".addtag").blur(function(){
             var name = $(".addtag").val();
             if(name!=""){
                   //alert($(".addtag").val());
-                  $.post(
-                      "/tags",
-                      {
-                        name: name
-                      },
-                      function(response,status,xhr){
-                          if(!response.error){
-                                $("#newtag").removeAttr("id")
-                                $(".addtag").replaceWith(name);
-                          }
-                          else{
-                                $("#newtag").remove();
-                          }
-                      },
-                      "json"
-                 );
+                  that.manager.webService.tagAdd(name, function(response){                  
+                        if(!response.error){
+                              $("#newtag")[0].dataset["id"]=response.tag.id;
+                              $("#newtag").removeAttr("id");
+                              $(".addtag").replaceWith(name);
+                              that.tags.push({id:response.tag.id,name:response.tag.name,num:0});
+                        }
+                        else{
+                              $("#newtag").remove();
+                        }
+                  });
                   //that.tags.push({name: $(".addtag").val(),num: 0});
                   //$("#newtag").removeAttr("id")
                   //$(".addtag").replaceWith($(".addtag").val());
@@ -349,7 +321,7 @@ FmTopPanel.prototype.init = function() {
             else{
                 $("#newtag").remove();
             }
-        })
+        });
     });
     /*$(".tags .search").change(function(){
         if($(".tags .search").val()==""){
@@ -368,14 +340,14 @@ FmTopPanel.prototype.init = function() {
     var setSearchTag = function()
     {
         //alert($(".tags .search").val());
-        if($(".tags .search").val()==""){
+        if($("#top .tags .search").val()==""){
               that.showTags(that.tags);
               return;
         }
         var tmp = new Array();
         for(var i = 0; i< that.tags.length ; i++){
             var tmptag = that.tags[i].name+" ";
-            var v = $(".tags .search").val()+" "
+            var v = $("#top .tags .search").val()+" "
             tmptag = tmptag.toLowerCase();
             v = v.toLowerCase();
             if(tmptag.trim().indexOf(v.trim())>=0){
@@ -388,16 +360,16 @@ FmTopPanel.prototype.init = function() {
     if($.browser.msie)    // IE浏览器
     {
         //alert("ie");
-        $(".tags .search").get(0).onpropertychange = setSearchTag;
+        $("#top .tags .search").get(0).onpropertychange = setSearchTag;
     }
     else    // 其他浏览器
     {
-        $(".tags .search").get(0).addEventListener("input",setSearchTag,false);
+        $("#top .tags .search").get(0).addEventListener("input",setSearchTag,false);
     }
 }
 FmTopPanel.prototype.showTags = function(tags) {
-    var $result = $(".tags .entries");
-     $(".tags .entry.clickable").remove();
+    var $result = $("#top .tags .entries");
+     $("#top .tags .entry.taghead").remove();
     // update counter
     // build new result HTML elements
     var resultHtml = this.tagHtmlBuilder.toHtml(tags);
@@ -953,13 +925,38 @@ FmWebService.prototype.docsDetail = function() {
 FmWebService.prototype.docsEdit = function() {
 }
 FmWebService.prototype.tagsList = function(callback) {
-      
+      $.get(
+          "/tags",
+          {},
+          function(response,status,xhr){
+              callback(response);
+          },
+          "json"
+     );
 }
-FmWebService.prototype.tagAdd = function(newtag) {
+FmWebService.prototype.tagAdd = function(tagname,callback) {
+    $.post(
+          "/tags",
+          {
+            name: tagname
+          },
+          function(response,status,xhr){
+                callback(response);
+          },
+          "json"
+     );
 }
 FmWebService.prototype.tagEdit = function() {
 }
-FmWebService.prototype.tagDelete = function() {
+FmWebService.prototype.tagDelete = function(tagid, callback) {
+     $.ajax({
+          url: '/tags/'+tagid,
+          type: 'DELETE',
+          async: false,
+          complete: function(response, status) {
+              callback(response)
+          }
+     });
 }
 FmWebService.prototype.FrSearch = function(callback) {
     /*$.get(
@@ -1060,7 +1057,7 @@ FmTagHtmlBuilder.prototype.toHtml = function(tags) {
     var l = tags.length;
     for(var i = 0; i < l; ++i) {
         var e = tags[i]
-        htmlToInsert.push('<li class="entry clickable"><h3 class="tag">' + 
+        htmlToInsert.push('<li class="entry taghead clickable"><h3 class="tag" data-id='+e.id+'>' + 
                            e.name+ '</h3><h3 class="num">'+e.num
                           +'</h3><h3 class="delete button"></h3>'
                           +'<h3 class="delete ok">delete</h3></li>');
