@@ -1,10 +1,7 @@
 class TagsController < ApplicationController
   def index
-    user = current_user
-    result = user.tags.all.map do |t|
-        { :name => t.name, :num => t.collections.count }
-    end
-    response = { :error => nil, :tags => result }
+    tags = current_user.list_all_tags
+    response = { :error => nil, :tags => tags }
     json = ActiveSupport::JSON.encode response
     respond_to do |format| 
         format.html { head :no_content }
@@ -15,21 +12,44 @@ class TagsController < ApplicationController
   end
 
   def create
-    user = current_user
-    tag = Tag.new(name: params[:name],user_id: user.id)
-    if tag.save    
+    tag = current_user.create(
+      :name => params[:name],
+      :user_id => current_user.id)
+    _respond_tag_request tag
+  end
+
+  def destroy
+    tag = current_user.delete_tag params[:id]
+    _respond_tag_request tag 
+  end
+
+  def update
+    tag = curent_user.rename_tag params[:id], params[:name]
+    _respond_tag_request tag
+  end
+
+  private 
+
+  def _respond_tag_request tag
+    if tag
         respond_to do |format| 
             format.html { head :no_content }
-            format.json { render :json => '{"error":null}'}
+            format.json {
+              response = { :tag => tag }
+              json = ActiveSupport::JSON.encode response
+              render :json => json
+            }
         end        
     else
         respond_to do |format| 
             format.html { head :no_content }
-            format.json { render :json => '{"error":"'+tag.errors.full_messages.join(";")+'"}'}
+            format.json { 
+              response = { :error => true, :tag => tag }
+              json = ActiveSupport::JSON.encode response
+              render :json => json
+            }
         end
     end 
-  end
 
-  def destroy
   end
 end

@@ -4,7 +4,7 @@ class Tag < ActiveRecord::Base
   validates :name, presence: true, length: {maximum:100}
 
   belongs_to :user
-  has_many :collections, foreign_key: "tag_id", dependent:   :destroy
+  has_many :collections, foreign_key: "tag_id"
   has_many :docs, through: :collections
 
   default_scope order: 'tags.name ASC'

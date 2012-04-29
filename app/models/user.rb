@@ -70,4 +70,30 @@ class User < ActiveRecord::Base
     # result
     { :total => total, :entries => entries }
   end
+
+  def list_all_tags
+    self.tags.all.map do |t|
+        { :name => t.name, :num => t.collections.count }
+    end
+  end
+
+  def create_tag name
+    new_tag = self.tags.create(:name=>name,:user_id=>self.id)
+    { id: new_tag.id, name: new_tag.name } 
+  end
+
+  def delete_tag tag_id
+    Tag.delete tag_id
+    { id: tag_id }
+  end
+
+  def rename_tag tag_id, new_name
+    tag = Tag.find_by_id tag_id
+    tag.name= new_name
+    if tag.save
+      return { id: tag.id, name: tag.name }
+    else
+      return nil
+    end
+  end
 end

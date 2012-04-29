@@ -1,16 +1,18 @@
 class DocsController < ApplicationController
     def index
-        result = current_user.search_docs params
-        response = {
-            :error => nil, 
-            :result => result 
-        }
-        json = ActiveSupport::JSON.encode response
+        result = current_user.search_docs params 
         respond_to do |format| 
             format.html { head :no_content }
-            format.json { render :json => json }
+            format.json { 
+              response = {
+                  :result => result 
+              }
+              json = ActiveSupport::JSON.encode response
+              render :json => json 
+            }
         end            
-    end    
+    end
+
     def create
         # save file
         uploaded_io = params[:file]
