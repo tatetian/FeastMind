@@ -96,4 +96,30 @@ class User < ActiveRecord::Base
       return nil
     end
   end
+
+  def attach_tag doc_id, tag_name
+    tag = self.tags.find_by_name tag_name
+    # create a tag if not exists
+    if tag == nil
+      tag = create_tag tag_name
+      tag = Tag.find_by_id tag.id
+    end
+    # create a new collection
+    collection = tag.collections.create :doc_id => doc_id 
+    return nil if collection
+    { :tag_id => collection.tag_id,
+      :doc_id => collection.doc_id }
+  end
+
+  def detach_tag doc_id, tag_name
+    tag = self.tags.find_by_name tag_name
+    return nil if tag == nil
+    Collection.delete_all :tag_id => tag.id, :doc_id => doc_id
+    { :tag_id => tag.id,
+      :doc_id => doc_id }
+  end
+
+  def retach_tag doc_id, tag_name, new_tag_name
+    attach_tag doc_id, new_tag_name if detach_tag doc_id, tag_name
+  end 
 end
