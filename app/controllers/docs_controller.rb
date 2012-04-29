@@ -33,8 +33,6 @@ class DocsController < ApplicationController
         File.open(tmp_text_file, 'wb') do |file|
             file.write(doc_text)
         end
-        # save png
-        %x[app/tools/pdf2png "#{tmp_pdf_file}" 150 "#{tmp_dir}"]
         # extract meta
         doc_meta = %x[app/tools/json2meta #{tmp_text_file}]
         # add doc id
@@ -64,6 +62,9 @@ class DocsController < ApplicationController
             # add collection            
             user = current_user
             user.collect! @doc
+            # save png
+            #%x[app/tools/pdf2png "#{tmp_pdf_file}" 150 "#{tmp_dir}"]
+            Process.spawn 'app/tools/pdf2png', (final_dir.to_s + "/uploaded.pdf"), "150", final_dir.to_s
         else
             respond_to do |format| 
                 format.html { head :no_content }
