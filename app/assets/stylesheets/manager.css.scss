@@ -662,7 +662,7 @@ body > .loading {
     user-select: text;
     cursor: auto;
 }
-.main .entry .tag-delete{
+.main .entry .delete.button{
   background:url(/assets/tag-delete.png) no-repeat left center ;
   position:absolute;
   float:right;
@@ -671,14 +671,14 @@ body > .loading {
   width:22px;
   height:22px;
   -webkit-transition: -weblit-transform 1.5s linear;
-  
+  display:none;
 }
-.main .entry .tag-delete.clicked{
+.main .entry .delete.button.clicked{
 
 -webkit-transform:rotate(90deg);
   
 }
-.main .entry .tag-delete-ok{
+.main .entry .delete.ok{
   background:url(/assets/rise-bg-red.png)  ;
   -webkit-border-radius:8px;
   padding:0px;
@@ -692,6 +692,7 @@ body > .loading {
   font-size:16px;
   font-weight:bold;
   text-align:center;
+  display:none;
 }
 #main > .slide > div{
 }

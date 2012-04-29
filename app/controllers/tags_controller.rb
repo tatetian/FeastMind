@@ -12,7 +12,7 @@ class TagsController < ApplicationController
   end
 
   def create
-    tag = current_user.create(
+    tag = current_user.create_tag(
       :name => params[:name],
       :user_id => current_user.id)
     _respond_tag_request tag

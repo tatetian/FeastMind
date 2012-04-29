@@ -288,6 +288,37 @@ FmTopPanel.prototype.init = function() {
             that.cached.btns.$editTag.show();
         }
     });
+    that.cached.btns.$editTag.click(function(){
+        var debu= $(".tags .entry .button");
+        debu.toggle();        
+        if(debu.css("display")=="block"){
+            debu.parent().removeClass("clickable");
+        }
+        else{
+            debu.parent().addClass("clickable");            
+            debu.removeClass("clicked");
+        }
+        $(".tags .entry .ok").toggle(false);
+    });   
+    that.cached.$me.delegate(".tags .entry .button","click",function(e){
+            var deok = $(this).next();   
+            var temp = deok.css("display");
+            $(".tags .entry .button").removeClass("clicked");            
+            $(".tags .entry .ok").hide();
+            if(temp=="none"){                          
+                $(this).addClass("clicked");
+                $(deok).fadeIn(300);
+                $(deok).focus();
+            }
+            else{
+                $(this).removeClass("clicked");
+                $(deok).fadeOut(300);
+            }
+    });
+    that.cached.$me.delegate(".tags .entry .ok","blur",function(e){
+            alert("OK");
+            $(this).next().hide();
+    });
     that.cached.btns.$addTag.click(function(){
         $(".tags .entries").append('<li class="entry clickable" id="newtag"><h3 class="tag"><input type="text" class="addtag" autocomplete="off"/></h3><h3 class="num">0</h3></li>');   
         $(".addtag").focus();
@@ -1030,7 +1061,9 @@ FmTagHtmlBuilder.prototype.toHtml = function(tags) {
     for(var i = 0; i < l; ++i) {
         var e = tags[i]
         htmlToInsert.push('<li class="entry clickable"><h3 class="tag">' + 
-                           e.name+ '</h3><h3 class="num">'+e.num+'</h3></li>');
+                           e.name+ '</h3><h3 class="num">'+e.num
+                          +'</h3><h3 class="delete button"></h3>'
+                          +'<h3 class="delete ok">delete</h3></li>');
     }
     return htmlToInsert.join('');
 }
