@@ -2,4 +2,4 @@
 # $1 is the name of input PDF file 
 # $2 is resolution of output PNG file
 # $3 is the output directory
-pdftocairo -r $2 -png $1 $3/page
+pdftocairo -r $2 -png $1 $3/page &

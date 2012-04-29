@@ -1,10 +1,11 @@
 /**
  * Entry point
  * */
+var docid = null;
 $(document).ready(function() {
+    docid = $(".docid")[0].dataset["docid"];
     $("#preloader").hide();
-
-    $.get("/uploads/text.json", {}, function(data) {
+    $.get("/uploads/"+docid+"/text.json", {}, function(data) {
         reader.init(data);
     }, "json"); 
 });
@@ -370,7 +371,12 @@ var reader = {
         var pages = reader.pages;
         var l = pages.length;
         for (var i = 0; i < l; ++i) {
-            var $li = $('<li pageId='+(i+1)+'><img class="page-image unselectable" unselectable="on" src="/uploads/pages/page-'+(i+1)+'.png"/></li>');
+            var index  = '';
+            if(i+1<10){
+                index += "0"+(i+1);
+            }
+            else index += i+1;
+            var $li = $('<li pageId='+(i+1)+'><img class="page-image unselectable" unselectable="on" src="/uploads/'+docid+'/page-'+index+'.png"/></li>');
             $li.appendTo($("#page-container"));
             $("img", $li).mousedown(reader.disableDragging);
         }

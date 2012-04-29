@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
               .limit(limit)
               .where("title LIKE '%#{keywords}%' OR "+
                     "author LIKE '%#{keywords}%'")
-              .select("docs.id,title,author,date,docs.created_at")
+              .select("docs.id,title,author,date,docid,docs.created_at")
               .map { |doc| 
                       d = doc.attributes
                       d[:tags] = doc.tags.map { |t| t.name } 
@@ -69,6 +69,44 @@ class User < ActiveRecord::Base
                             "author LIKE '%#{keywords}%'").count
     # result
     { :total => total, :entries => entries }
+  end
+
+  def has_doc?(params)
+    if params.has_key?(:doc_id)
+      doc_id = params[:doc_id]
+      if self.tags.find_by_name("All").docs.find_by_id(doc_id) != nil
+        return true
+      else
+        return false
+      end
+    elsif params.has_key?(:docid)
+      docid = params[:docid]
+      if self.tags.find_by_name("All").docs.find_by_docid(docid) != nil
+        return true
+      else
+        return false
+      end
+    end
+    false
+  end
+
+  def get_text(params)
+    if params.has_key?(:doc_id)
+      doc_id = params[:doc_id]
+      {
+        :doc_id   => doc_id,
+        :content  => self.tags.find_by_name("All")
+                              .docs.find_by_id(doc_id).content
+      }
+    elsif params.has_key?(:docid)
+      docid = params[:docid]
+      {
+        :docid    => docid,
+        :content  => self.tags.find_by_name("All")
+                         .docs.find_by_docid(docid).content
+      }
+    end
+    nil
   end
 
   def list_all_tags

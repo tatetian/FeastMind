@@ -33,6 +33,8 @@ class DocsController < ApplicationController
         File.open(tmp_text_file, 'wb') do |file|
             file.write(doc_text)
         end
+        # save png
+        %x[app/tools/pdf2png "#{tmp_pdf_file}" 150 "#{tmp_dir}"]
         # extract meta
         doc_meta = %x[app/tools/json2meta #{tmp_text_file}]
         # add doc id
@@ -45,7 +47,8 @@ class DocsController < ApplicationController
                 format.html { head :no_content }
                 format.json { 
                     response = { 
-                        :id     => @doc.id, 
+                        :id     => @doc.id,
+                        :docid  => @doc.docid, 
                         :title  => @doc.title, 
                         :author => @doc.author, 
                         :date   => @doc.date,
@@ -72,9 +75,16 @@ class DocsController < ApplicationController
         # UserDoc doc_id, user_id
         end
     end
-
+  
+    def text
+      respond_to do |format| 
+        format.html { head :no_content }
+        format.json { 
+          render :json => current_user.get_text(params)
+        }
+      end
+    end
   private 
-
       def _doc_hash(f)
         require 'digest/sha1'
         Digest::SHA1.hexdigest(File.read(f)).to_s

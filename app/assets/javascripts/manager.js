@@ -30,6 +30,20 @@ FmManager.prototype.init = function() {
     // init slide event
     var that = this;
     function slideView(e) {
+        if(that.mainPanel.state.isPrimaryView) {
+            var img = $("#main .paper-cover");
+            var docid = $(this)[0].dataset["id"];
+            img.attr("src",'/uploads/'+docid+'/page-01.png');
+            img.parent().attr('href','/reader?docid='+docid);
+            that.topPanel.cached.$secondaryTitle.html('<span><em>'+ $(this)[0].dataset["title"] +'</em></span>');
+            var doctaghtml = [];
+            for(var i = 0;i< 0;i++){            
+              doctaghtml.push('<span class=" detail-tag">');
+              
+              doctaghtml.push('</span>');
+            }
+            $("#main .entry-details .tag-wrapper").html(doctaghtml.join(""));
+        }
         that.topPanel.slideView();
         that.mainPanel.slideView();
         if(e) e.stopPropagation();
@@ -1173,7 +1187,7 @@ FmResultHtmlBuilder.prototype.entryToHtml = function(e, firstInGroup) {
     var htmlToInsert = [];
 
     htmlToInsert.push('<div class="entry clickable' + 
-                          (firstInGroup?' first"':'"') + unselectable + '>');
+                          (firstInGroup?' first"':'"') + unselectable +' data-id='+ e.docid +' data-title="'+ e.title +'">');
     htmlToInsert.push('<div class="info"' + unselectable + '>');
     htmlToInsert.push('<h4' + unselectable + '><em' + unselectable + '>' + e.title + '</em></h4>');
     if(e.author) {

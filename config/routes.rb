@@ -5,14 +5,11 @@ FeastMind::Application.routes.draw do
 
   get "tags/destroy"
 
-  get "users/new"
-
-  get "users/show"
-  
   resources :users
   resources :docs
   resources :tags
-  
+  match "/text" => 'docs#text'
+
   resources :sessions, only: [:new, :create, :destroy]
 
   match '/signout', to: 'sessions#destroy', via: :delete

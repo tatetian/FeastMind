@@ -1,6 +1,8 @@
 class Doc < ActiveRecord::Base
     attr_accessible :docid, :title, :author, :date, :content, :convert
-    before_save { |doc| }
+    after_save { |doc| 
+    
+    }
  
     validates   :docid, presence: true, uniqueness: {case_sensitive:true}
     validates   :title, presence: true
