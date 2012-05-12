@@ -53,13 +53,24 @@ class User < ActiveRecord::Base
     start ||= 0
     limit ||= 10
     keywords ||= ""
+    #mysql> delimiter //
+#mysql> create procedure search_docs(in tag_id int,in title varchar(255),in author varchar(255)) begin set @sql = CONCAT('SELECT `docs`.`id`,IFNULL(docs.title,papers.title) as title,IFNULL(docs.author,papers.author) as author ,IFNULL(docs.date,papers.date) as date,docs.docid,docs.created_at FROM `docs`,papers,`collections`,tags where  `docs`.`id` = `collections`.`doc_id` and `docs`.`paper_id`=paper.id and tag_id=tags.id and tags.id =',tag_id,' AND  (IFNULL(docs.title,papers.title) LIKE (''%',title,'%'') OR IFNULL(docs.author,papers.author) LIKE(''%',author,'%'') )');prepare s1 from @sql;execute s1;deallocate prepare s1;end; 
+#    -> //
+#Query OK, 0 rows affected (0.00 sec)
+
+#mysql> delimiter ;
+#mysql> call search_docs(1,'','')
+#    -> ;
+    
+    sql="SELECT `docs`.`id`,IFNULL(docs.title,papers.title) as title,IFNULL(docs.author,papers.author) as author ,IFNULL(docs.date,papers.date) as date,docs.docid,docs.created_at FROM `docs`,papers,`collections`,tags where  `docs`.`id` = `collections`.`doc_id` and `docs`.`paper_id`=papers.id and tag_id=tags.id and tags.id ="+tag.id.to_s+" AND  (IFNULL(docs.title,papers.title) LIKE ('%"+keywords+"%') OR IFNULL(docs.author,papers.author) LIKE('%"+keywords+"%') ) LIMIT "+start.to_s+","+(start+limit).to_s
+    @result=Doc.find_by_sql(sql) 
     entries = 
-      tag.docs.offset(start)
-              .limit(limit)
-              .where("title LIKE '%#{keywords}%' OR "+
-                    "author LIKE '%#{keywords}%'")
-              .select("docs.id,title,author,date,docid,docs.created_at")
-              .map { |doc| 
+      #tag.docs.offset(start)
+      #        .limit(limit)
+      #        .where("title LIKE '%#{keywords}%' OR "+
+      #              "author LIKE '%#{keywords}%'")
+      #        .select("docs.id,title,author,date,docid,docs.created_at")
+      @result.map { |doc| 
                       d = doc.attributes
                       d[:tags] = doc.tags.map { |t| t.name } 
                       d
@@ -96,14 +107,13 @@ class User < ActiveRecord::Base
       {
         :doc_id   => doc_id,
         :content  => self.tags.find_by_name("All")
-                              .docs.find_by_id(doc_id).content
+                              .docs.find_by_id(doc_id).paper.content
       }
     elsif params.has_key?(:docid)
       docid = params[:docid]
       {
         :docid    => docid,
-        :content  => self.tags.find_by_name("All")
-                         .docs.find_by_docid(docid).content
+        :content  => paper.find_by_docid(docid).content
       }
     end
     nil

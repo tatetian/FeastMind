@@ -37,8 +37,27 @@ class DocsController < ApplicationController
         doc_meta = %x[app/tools/json2meta #{tmp_text_file}]
         # add doc id
         parsed_meta = ActiveSupport::JSON.decode doc_meta
-        #json_response = {:file_name => uploaded_io.original_filena
-        @doc = Doc.new(docid: hash,title: parsed_meta["title"],author: parsed_meta["authors"].join(", "),date: Date.parse(parsed_meta["date"]),content: doc_text,convert: 0)
+        #json_response = {:file_name => uploaded_io.original_filena                   
+        user = current_user
+        @paper = Paper.find_by_docid hash
+        if @paper == nil
+            @paper = Paper.new(docid: hash,title: parsed_meta["title"],author: parsed_meta["authors"].join(", "),date: Date.parse(parsed_meta["date"]),content: doc_text, abstract: "", publication: "", convert: 0)
+                if !@paper.save!
+                    respond_to do |format| 
+                        format.html { head :no_content }
+                        format.json { render :json => '{"error":"failed1"}' }
+                     end
+                    return 
+                end
+        end
+        if user.has_doc? :docid=> hash
+            respond_to do |format| 
+                        format.html { head :no_content }
+                        format.json { render :json => '{"error":"failed2"}' }
+            end
+            return 
+        else
+          @doc = Doc.new(docid: hash,title: nil,author: nil,date: nil, paper_id: @paper.id)
         if @doc.save
             flash[:success] = "Upload Success!"
             respond_to do |format| 
@@ -59,8 +78,7 @@ class DocsController < ApplicationController
             # save PDF
             final_dir = Rails.root.join 'public','uploads',hash
             FileUtils.mv(tmp_dir, final_dir)
-            # add collection            
-            user = current_user
+            # add collection 
             user.collect! @doc
             # save png
             #%x[app/tools/pdf2png "#{tmp_pdf_file}" 150 "#{tmp_dir}"]
@@ -68,8 +86,9 @@ class DocsController < ApplicationController
         else
             respond_to do |format| 
                 format.html { head :no_content }
-                format.json { render :json => "{error:\"failed\"}" }
+                format.json { render :json => '{"error":"failed3"}' }
             end
+        end
         #userdoc.create();
         # database
         # Docs.save id, title, author, date

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120427120043) do
+ActiveRecord::Schema.define(:version => 20120502114813) do
 
   create_table "collections", :force => true do |t|
     t.integer  "tag_id"
@@ -31,11 +31,23 @@ ActiveRecord::Schema.define(:version => 20120427120043) do
     t.date     "date"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "paper_id"
+  end
+
+  create_table "papers", :force => true do |t|
+    t.string   "docid"
+    t.string   "title"
+    t.string   "author"
+    t.date     "date"
+    t.string   "publication"
+    t.string   "abstract"
     t.text     "content"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "convert"
   end
 
-  add_index "docs", ["docid"], :name => "index_docs_on_docid", :unique => true
+  add_index "papers", ["docid"], :name => "index_papers_on_docid", :unique => true
 
   create_table "tags", :force => true do |t|
     t.string   "name"
